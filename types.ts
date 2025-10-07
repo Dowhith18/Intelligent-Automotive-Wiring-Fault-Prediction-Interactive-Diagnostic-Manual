@@ -1,37 +1,39 @@
 
-export interface Vehicle {
+export interface ECUModule {
   id: string;
-  vin: string;
-  make: string;
-  model: string;
-  year: number;
-  engine: string;
-  lastService: string;
-  status: 'Operational' | 'Needs Attention' | 'In Service';
-  imageUrl: string;
+  name: string;
+  shortName: string;
+  status: 'SUCCESS' | 'DTC_FOUND' | 'NO_RESPONSE';
+  dtcCount: number;
 }
 
-export enum SessionStatus {
-  PENDING = 'Pending Analysis',
-  ANALYZING = 'Analyzing',
-  COMPLETE = 'Completed',
-  IN_PROGRESS = 'In Progress',
+export enum DTCStatus {
+    CURRENT = 'Current',
+    HEALED = 'Healed',
+    HISTORY = 'History',
+    PENDING = 'Pending',
 }
 
-export interface DiagnosticSession {
-  id: string;
-  vehicleId: string;
-  vehicleName: string;
-  technician: string;
-  startDate: string;
-  status: SessionStatus;
-  symptoms: string[];
-  dtcs: string[];
+export interface FreezeFrameData {
+    parameter: string;
+    value: string | number;
+    unit: string;
 }
 
-export interface PredictedFault {
-    fault: string;
+export interface DTC {
+    id: string;
+    ecu: string;
+    category: string;
+    code: string;
     description: string;
-    confidence: number;
-    recommendedActions: string[];
+    status: DTCStatus;
+    freezeFrame: FreezeFrameData[];
+}
+
+export interface LiveData {
+    odometer: number;
+    batteryVoltage: number;
+    vehicleSpeed: number;
+    engineSpeed: number;
+    ignitionCounter: number;
 }

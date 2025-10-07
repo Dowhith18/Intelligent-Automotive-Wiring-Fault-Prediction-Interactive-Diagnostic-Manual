@@ -9,8 +9,10 @@ const placeholderAnonKey = 'your-supabase-anon-key';
 const supabaseUrl = process.env.SUPABASE_URL || placeholderUrl;
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || placeholderAnonKey;
 
+export const isSupabaseConfigured = supabaseUrl !== placeholderUrl && supabaseAnonKey !== placeholderAnonKey;
+
 // A more prominent warning for the developer.
-if (supabaseUrl === placeholderUrl || supabaseAnonKey === placeholderAnonKey) {
+if (!isSupabaseConfigured) {
     console.warn(
 `********************************************************************************
 *                                                                              *
@@ -18,6 +20,7 @@ if (supabaseUrl === placeholderUrl || supabaseAnonKey === placeholderAnonKey) {
 *                                                                              *
 *   The application is using placeholder credentials.                          *
 *   Authentication and database features will not work.                        *
+*   - Using mock user for development -                                        *
 *                                                                              *
 *   Please create a .env file in the root directory and add your               *
 *   Supabase project URL and Anon Key.                                         *

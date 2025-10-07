@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Wrench, LogIn } from '../components/icons';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Eye, EyeOff } from '../components/icons';
 import { useAuth } from '../contexts/AuthContext';
+import StatusBar from '../components/StatusBar';
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { login, isAuthenticated } = useAuth();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('11aab0000');
+    const [password, setPassword] = useState('••••••••');
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const from = location.state?.from?.pathname || '/app/dashboard';
+    const from = location.state?.from?.pathname || '/app';
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -25,8 +27,8 @@ const Login: React.FC = () => {
         setError('');
         setLoading(true);
         try {
-            await login(email, password);
-            // Redirection is now handled by the useEffect watching isAuthenticated
+            // Using username as email for Supabase mock
+            await login(username + '@example.com', password);
         } catch (err: any) {
             setError(err.message || "Failed to sign in. Please check your credentials.");
         } finally {
@@ -35,97 +37,76 @@ const Login: React.FC = () => {
     };
 
   return (
-    <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <Wrench className="mx-auto h-12 w-auto text-primary-400" />
-        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-dark-text-primary">
-          Sign in to your account
-        </h2>
-        <p className="mt-2 text-center text-sm text-dark-text-secondary">
-          Or{' '}
-          <Link to="/register" className="font-medium text-primary-400 hover:text-primary-300">
-            create a new account
-          </Link>
-        </p>
-      </div>
-
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-dark-surface py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            {error && <p className="text-center text-sm text-red-500 bg-red-500/10 p-2 rounded-md">{error}</p>}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-dark-text-secondary">
-                Email address
-              </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full appearance-none rounded-md border border-dark-border bg-dark-bg px-3 py-2 placeholder-dark-text-secondary shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-dark-text-secondary">
-                Password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full appearance-none rounded-md border border-dark-border bg-dark-bg px-3 py-2 placeholder-dark-text-secondary shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-dark-border text-primary-600 focus:ring-primary-500 bg-dark-bg"
-                />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-dark-text-secondary">
-                  Remember me
-                </label>
-              </div>
-
-              <div className="text-sm">
-                <a href="#" className="font-medium text-primary-400 hover:text-primary-300">
-                  Forgot your password?
-                </a>
-              </div>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="flex w-full justify-center rounded-md border border-transparent bg-primary-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-surface disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? 'Signing in...' : (
-                    <>
-                        <LogIn className="w-5 h-5 mr-2 -ml-1" />
-                        Sign in
-                    </>
-                )}
-              </button>
-            </div>
-          </form>
+    <div className="h-screen w-screen flex flex-col">
+        <div className="absolute top-0 right-0 p-2 flex space-x-2">
+            <button className="h-6 w-6 bg-gray-600 hover:bg-gray-700 rounded-sm">-</button>
+            <button className="h-6 w-6 bg-gray-600 hover:bg-gray-700 rounded-sm">☐</button>
+            <button className="h-6 w-6 bg-mida-accent-red hover:bg-mida-accent-red-dark rounded-sm">X</button>
         </div>
-      </div>
+        <p className="text-center py-2 text-sm text-mida-text-secondary">Mahindra Intelligent Diagnostic Assistant - 1.0.8983.11 [Prod]</p>
+        
+        <h1 className="text-2xl font-semibold text-center my-6 text-mida-text-primary">Mahindra Intelligent Diagnostic Assistant</h1>
+
+        <div className="flex-1 flex items-center justify-center relative">
+            <h2 className="absolute left-4 top-1/2 -translate-y-1/2 -rotate-90 origin-center text-2xl font-semibold tracking-wider text-mida-text-primary whitespace-nowrap">
+                Mahindra Intelligent Diagnostic Assistant
+            </h2>
+            
+            <div className="w-full max-w-sm">
+                <div className="relative mb-8 flex justify-center">
+                    <img src="https://i.imgur.com/rL6p3TL.png" alt="Mida Logo" className="h-20 w-auto"/>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="bg-white rounded-lg p-8 shadow-2xl space-y-6">
+                        <h3 className="text-center font-bold text-gray-700 text-xl">Authentication</h3>
+                        <div>
+                            <label className="text-sm font-medium text-gray-600">User Name</label>
+                            <input
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                required
+                                className="mt-1 w-full border-b-2 border-gray-300 focus:border-black focus:outline-none text-gray-800"
+                            />
+                        </div>
+                        <div>
+                            <label className="text-sm font-medium text-gray-600">Password</label>
+                            <div className="relative">
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    className="mt-1 w-full border-b-2 border-gray-300 focus:border-black focus:outline-none text-gray-800"
+                                />
+                                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                                    {showPassword ? <EyeOff /> : <Eye />}
+                                </button>
+                            </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                             <div className="flex items-center">
+                                <input id="remember-me" type="checkbox" className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black" defaultChecked />
+                                <label htmlFor="remember-me" className="ml-2 text-sm text-gray-600">Remember me</label>
+                            </div>
+                            <a href="#" className="text-sm text-mida-accent-red hover:underline">License Ok</a>
+                        </div>
+                         {error && <p className="text-center text-sm text-red-500">{error}</p>}
+                    </div>
+                    
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full bg-black text-white py-3 rounded-md font-semibold text-lg hover:bg-gray-800 transition-colors disabled:opacity-50"
+                    >
+                        {loading ? 'Logging in...' : 'Login'}
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+       <StatusBar />
     </div>
   );
 };

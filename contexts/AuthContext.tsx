@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import { supabase } from '../supabaseClient';
+import { supabase, isSupabaseConfigured } from '../supabaseClient';
 import type { AuthChangeEvent, Session, User } from '@supabase/supabase-js';
 
 // Define the shape of the context
@@ -23,6 +23,28 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (!isSupabaseConfigured) {
+      const mockUser: User = {
+        id: 'mock-user-id',
+        app_metadata: { provider: 'email', providers: ['email'] },
+        user_metadata: { name: 'Mock Technician' },
+        aud: 'authenticated',
+        created_at: new Date().toISOString(),
+        email: 'technician@example.com',
+      };
+      const mockSession: Session = {
+        access_token: 'mock-access-token',
+        refresh_token: 'mock-refresh-token',
+        expires_in: 3600,
+        token_type: 'bearer',
+        user: mockUser,
+      };
+      setUser(mockUser);
+      setSession(mockSession);
+      setIsLoading(false);
+      return;
+    }
+
     // Check for an active session on initial load
     const getInitialSession = async () => {
         const { data: { session } } = await supabase.auth.getSession();
@@ -49,12 +71,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   
   // Login
   const login = async (email: string, pass: string) => {
+    if (!isSupabaseConfigured) return;
     const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
     if (error) throw error;
   };
 
   // Register
   const register = async (email: string, pass: string, name: string) => {
+     if (!isSupabaseConfigured) return;
      const { error } = await supabase.auth.signUp({
         email,
         password: pass,
@@ -69,6 +93,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // Logout
   const logout = async () => {
+    if (!isSupabaseConfigured) {
+        console.log("Logout is disabled when Supabase is not configured to prevent being locked out.");
+        return;
+    }
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
   };
