@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IAWFPIDM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#1e3a8a', // Deep Blue
+              '50': '#eef2ff',
+              '100': '#e0e7ff',
+              '200': '#c7d2fe',
+              '300': '#a5b4fc',
+              '400': '#818cf8',
+              '500': '#6366f1',
+              '600': '#4f46e5',
+              '700': '#4338ca',
+              '800': '#3730a3',
+              '900': '#312e81',
+              '950': '#1e1b4b'
+            },
+            secondary: '#475569', // Slate Gray
+            accent: {
+              DEFAULT: '#ea580c', // Electric Orange
+              '50': '#fff7ed',
+              '100': '#ffedd5',
+              '200': '#fed7aa',
+              '300': '#fdba74',
+              '400': '#fb923c',
+              '500': '#f97316',
+              '600': '#ea580c',
+              '700': '#c2410c',
+              '800': '#9a3412',
+              '950': '#7c2d12'
+            },
+            dark: {
+              'bg': '#111827',
+              'surface': '#1f2937',
+              'border': '#374151',
+              'text-primary': '#f9fafb',
+              'text-secondary': '#9ca3af',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            body: ['Source Sans Pro', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.22.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.3"
+  }
+}
+</script>
+</head>
+<body class="bg-dark-bg text-dark-text-primary font-body">
+  <div id="root"></div>
+</body>
+</html>
