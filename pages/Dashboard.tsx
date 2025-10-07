@@ -1,13 +1,14 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { DiagnosticSession } from '../types';
 import { MOCK_SESSIONS, MOCK_VEHICLES } from '../constants';
 import { SessionStatus } from '../types';
 import { Plus, Car, Wrench } from '../components/icons';
+import { useAuth } from '../contexts/AuthContext';
 
 const Dashboard: React.FC = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     const getStatusColor = (status: SessionStatus) => {
         switch (status) {
@@ -27,7 +28,7 @@ const Dashboard: React.FC = () => {
   return (
     <div>
         <h1 className="text-3xl font-bold text-dark-text-primary tracking-tight">Dashboard</h1>
-        <p className="mt-1 text-md text-dark-text-secondary">Welcome back, Technician. Here's what's happening today.</p>
+        <p className="mt-1 text-md text-dark-text-secondary">Welcome back, {user?.user_metadata?.name || 'Technician'}. Here's what's happening today.</p>
 
         {/* Quick Stats */}
         <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">

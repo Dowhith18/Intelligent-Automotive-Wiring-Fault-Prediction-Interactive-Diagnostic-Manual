@@ -1,62 +1,57 @@
-
 import { GoogleGenAI, Type } from '@google/genai';
 import type { PredictedFault } from '../types';
 
-// This is a MOCK implementation. In a real app, this would be a backend call.
-// The API key should be handled securely on a server, not in the frontend.
-// The `process.env.API_KEY` is a placeholder for that server-side logic.
-// const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// This implementation now uses the Google Gemini API.
+// The API key should be handled securely, ideally through a backend proxy.
+// For this environment, it's assumed process.env.API_KEY is configured.
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
-const MOCK_PREDICTIONS: PredictedFault[] = [
-    {
-        fault: 'Faulty Ignition Coil on Cylinder 3',
-        description: 'The ignition coil is failing to provide adequate spark, causing a misfire.',
-        confidence: 0.92,
-        recommendedActions: ['Check coil resistance', 'Swap coil with another cylinder', 'Replace ignition coil']
-    },
-    {
-        fault: 'Clogged Fuel Injector on Cylinder 3',
-        description: 'The fuel injector is not delivering the correct amount of fuel, leading to a lean condition.',
-        confidence: 0.78,
-        recommendedActions: ['Perform injector balance test', 'Clean fuel injector', 'Replace fuel injector']
-    },
-    {
-        fault: 'Vacuum Leak near Intake Manifold',
-        description: 'Unmetered air is entering the engine, causing a lean condition across all cylinders.',
-        confidence: 0.45,
-        recommendedActions: ['Perform smoke test', 'Inspect vacuum hoses', 'Check intake manifold gasket']
-    }
-];
 
 export const getFaultPrediction = async (symptoms: string, dtcs: string): Promise<PredictedFault[]> => {
-    console.log("Simulating Gemini API call with:", { symptoms, dtcs });
     
-    // In a real application, you would structure the prompt and call the Gemini API.
-    /*
+    // The prompt is engineered to make the AI act as an expert automotive diagnostician.
     const prompt = `
-        You are an expert automotive diagnostic AI.
-        Given the following symptoms and Diagnostic Trouble Codes (DTCs), predict the most likely faults.
-        Provide a list of faults with a confidence score and a brief description.
+        You are an expert automotive diagnostic AI. Your role is to analyze vehicle symptoms and 
+        Diagnostic Trouble Codes (DTCs) to predict the most likely faults.
 
-        Symptoms: ${symptoms}
-        DTCs: ${dtcs}
+        Analyze the following information:
+        - Symptoms: "${symptoms}"
+        - DTCs: "${dtcs}"
 
-        Return the response in a JSON array format.
+        Based on this data, provide a list of the top 3 most likely faults. For each fault, include:
+        1. A clear and concise name for the fault.
+        2. A brief description of why this fault is likely.
+        3. A confidence score between 0.0 and 1.0.
+        4. A list of 3-4 recommended, actionable diagnostic steps a technician should take to confirm the fault.
+
+        Return the response as a valid JSON array that adheres to the provided schema.
     `;
 
+    // The response schema ensures the AI returns data in a structured, predictable format.
     const responseSchema = {
         type: Type.ARRAY,
         items: {
             type: Type.OBJECT,
             properties: {
-                fault: { type: Type.STRING },
-                description: { type: Type.STRING },
-                confidence: { type: Type.NUMBER },
+                fault: { 
+                    type: Type.STRING,
+                    description: "The specific name of the predicted fault (e.g., 'Faulty Ignition Coil on Cylinder 3')."
+                },
+                description: { 
+                    type: Type.STRING,
+                    description: "A brief explanation of the fault and why it's suspected."
+                },
+                confidence: { 
+                    type: Type.NUMBER,
+                    description: "A confidence score from 0.0 to 1.0."
+                },
                 recommendedActions: { 
                     type: Type.ARRAY,
+                    description: "A list of actionable steps for the technician.",
                     items: { type: Type.STRING }
                 }
-            }
+            },
+            required: ["fault", "description", "confidence", "recommendedActions"]
         }
     };
 
@@ -70,19 +65,12 @@ export const getFaultPrediction = async (symptoms: string, dtcs: string): Promis
             },
         });
         
-        const jsonResponse = JSON.parse(response.text);
+        // FIX: Added .trim() to handle potential whitespace in the response string before parsing.
+        const jsonResponse = JSON.parse(response.text.trim());
         return jsonResponse as PredictedFault[];
 
     } catch (error) {
         console.error("Error calling Gemini API:", error);
-        throw new Error("Failed to get fault prediction from AI.");
+        throw new Error("Failed to get fault prediction from AI. Please check the API key and network connection.");
     }
-    */
-
-    // For this demo, we return mock data after a delay.
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve(MOCK_PREDICTIONS);
-        }, 2500); // Simulate network delay
-    });
 };

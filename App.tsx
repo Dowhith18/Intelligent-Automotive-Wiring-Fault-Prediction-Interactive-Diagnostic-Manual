@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
@@ -12,6 +11,7 @@ import NotFound from './pages/NotFound';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const App: React.FC = () => {
   return (
@@ -26,7 +26,14 @@ const App: React.FC = () => {
           </Route>
           
           {/* Main application */}
-          <Route path="/app" element={<Layout />}>
+          <Route 
+            path="/app" 
+            element={
+              <ProtectedRoute>
+                <Layout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="vehicles" element={<Vehicles />} />
