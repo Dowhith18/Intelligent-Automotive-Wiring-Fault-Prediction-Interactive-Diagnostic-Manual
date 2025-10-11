@@ -1,0 +1,130 @@
+/* Basic styles for the entire page */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100%;
+    background-color: #f4f4f4;
+}
+
+/* Main container for the two-column layout */
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Left-side navigation bar */
+.sidebar {
+    width: 25%;
+    max-width: 300px;
+    background-color: #fff;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+    overflow-y: auto; /* Adds a scrollbar if content is too long */
+}
+
+.sidebar h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar li a {
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #007bff;
+    border-radius: 4px;
+}
+
+.sidebar li a:hover {
+    background-color: #e9ecef;
+}
+
+/* Right-side content area */
+.content {
+    flex-grow: 1; /* Takes up the remaining space */
+    padding: 30px;
+    overflow-y: auto;
+}
+
+.content h1 {
+    color: #333;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.info-section {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 2em;
+    padding: 20px;
+}
+
+.info-section h2 {
+    margin-top: 0;
+    color: #555;
+}
+
+pre {
+    background-color: #f8f9fa;
+    padding: 1em;
+    border-radius: 5px;
+    white-space: pre-wrap; /* Wraps long lines of text */
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* New styles for tables and lists */
+.info-section table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.info-section th, .info-section td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.info-section th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.info-section ul {
+    padding-left: 20px;
+    margin-top: 0;
+}
+
+/* Left-side navigation bar */
+.sidebar {
+    width: 250px; /* Set an initial fixed width */
+    min-width: 150px; /* Prevent it from becoming too small */
+    background-color: #fff;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Style for the resizer handle */
+.resizer {
+    width: 5px;
+    cursor: col-resize; /* Changes the mouse cursor to a resize icon */
+    background-color: #ddd;
+    height: 100vh;
+}

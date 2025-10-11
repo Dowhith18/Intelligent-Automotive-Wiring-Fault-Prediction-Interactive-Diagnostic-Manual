@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DTC Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bundle.css') }}">
+</head>
+<body>
+    <h1>DTC: {{ code }}</h1>
+    {% for title, data in data.items() %}
+    <div class="x-procedure-2-0">
+        <div class="x-title-2-0">{{ title }}</div>
+        <div class="x-procbody-1-0">
+            {% if data.type == 'image' %}
+                <img src="{{ url_for('static', filename=data.content) }}" alt="{{ title }}">
+            {% elif data.type == 'html' %}
+                {{ data.content | safe }}
+            {% elif data.type == 'text' %}
+                <pre>{{ data.content }}</pre>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</body>
+</html>
