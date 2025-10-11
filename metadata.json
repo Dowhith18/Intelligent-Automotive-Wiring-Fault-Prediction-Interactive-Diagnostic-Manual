@@ -1,5 +1,0 @@
-{
-  "name": "IAWFPIDM: Intelligent Automotive Diagnostic Manual",
-  "description": "An enterprise-grade web application that combines AI-powered automotive diagnostics with an interactive digital manual system. The platform enables automotive technicians to predict electrical and wiring faults in EMS ECU systems using machine learning algorithms trained on comprehensive diagnostic data.",
-  "requestFramePermissions": []
-}

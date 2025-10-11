@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript">
+      if (document.location == top.document.location) {
+        var docNewLocation =
+          "default.htm?startat=" + document.location.pathname;
+        if (document.location.hash)
+          docNewLocation += "&hash=" + document.location.hash.substr(1);
+        document.location = docNewLocation;
+      }
+    </script>
+    <link href="css/styler.css" rel="stylesheet" type="text/css" />
+    <link href="css/styler_custom.css" rel="stylesheet" type="text/css" />
+    <title>
+      12.30&nbsp;U206200 — TCU Output Shaft Speed Signal Content Error
+    </title>
+  </head>
+  <body class="x-techinfomap-1-0" lang="en-US" id="mapelement_techinfomap1">
+    <div
+      xmlns:ch="http://www.arbortext.com/namespace/chunker"
+      class="x-procedure-3-0"
+      id="U206200OutputShaftSpeedErrorInTCU-04CC49F0"
+      lang="en-US"
+    >
+      <div class="x-title-3-0" id="styler-id1.1.1.14.32.1" lang="en-US">
+        12.30&nbsp;<span class="x-b-1-0" lang="en-US"
+          >U206200 — TCU Output Shaft Speed Signal Content Error</span
+        >
+      </div>
+      <div
+        class="x-procedure-2-0"
+        id="CANMESSAGECONTENTFAILURE-04CC4B61"
+        lang="en-US"
+      >
+        <div class="x-title-2-0" id="styler-id1.1.1.14.32.2.1" lang="en-US">
+          12.30.1&nbsp;CAN MESSAGE CONTENT FAILURE
+        </div>
+        <div class="x-procbody-1-0" lang="en-US">
+          <div class="x-table-1-0" lang="en-US">
+            <table
+              class="x-tgroup-1-0"
+              style="
+                width: 100%;
+                border-left-style: solid;
+                border-left-width: 1pt;
+                border-left-color: #000000;
+                border-top-style: solid;
+                border-top-width: 1pt;
+                border-top-color: #000000;
+                border-right-style: solid;
+                border-right-width: 1pt;
+                border-right-color: #000000;
+                border-bottom-style: solid;
+                border-bottom-width: 1pt;
+                border-bottom-color: #000000;
+              "
+            >
+              <colgroup>
+                <col style="width: 62%" />
+                <col style="width: 38%" />
+              </colgroup>
+              <thead
+                class="x-thead-1-0"
+                style="
+                  vertical-align: bottom;
+                  text-align: left;
+                  font-weight: bold;
+                "
+              >
+                <tr class="x-row-1-0">
+                  <th
+                    class="entry-in-tbody"
+                    style="
+                      text-align: center;
+                      vertical-align: middle;
+                      background-color: #95b3d7;
+                      padding: 3px;
+                      border-right-style: solid;
+                      border-right-width: 1pt;
+                      border-right-color: #000000;
+                      border-bottom-style: solid;
+                      border-bottom-width: 1pt;
+                      border-bottom-color: #000000;
+                      border-top-style: solid;
+                      border-top-width: 1pt;
+                      border-top-color: #000000;
+                      border-left-style: solid;
+                      border-left-width: 1pt;
+                      border-left-color: #000000;
+                    "
+                  >
+                    <span
+                      ><span
+                        ><span style="">
+                          <div class="x-p-5-0" lang="en-US">
+                            <span class="x-b-1-0" lang="en-US"
+                              >DTC INFORMATION</span
+                            >
+                          </div></span
+                        ></span
+                      ></span
+                    >
+                  </th>
+                  <th
+                    class="entry-in-tbody"
+                    style="
+                      text-align: center;
+                      vertical-align: middle;
+                      background-color: #95b3d7;
+                      padding: 3px;
+                      border-right-style: solid;
+                      border-right-width: 1pt;
+                      border-right-color: #000000;
+                      border-bottom-style: solid;
+                      border-bottom-width: 1pt;
+                      border-bottom-color: #000000;
+                      border-top-style: solid;
+                      border-top-width: 1pt;
+                      border-top-color: #000000;
+                    "
+                  >
+                    <span
+                      ><span
+                        ><span style="">
+                          <div class="x-p-5-0" lang="en-US">
+                            <span class="x-b-1-0" lang="en-US"
+                              >PROBABLE CAUSES OF FAILURE</span
+                            >
+                          </div></span
+                        ></span
+                      ></span
+                    >
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="x-tbody-1-0" style="vertical-align: top">
+                <tr class="x-row-1-0">
+                  <td
+                    class="entry-in-tbody"
+                    style="
+                      padding: 3px;
+                      border-right-style: solid;
+                      border-right-width: 1pt;
+                      border-right-color: #000000;
+                      border-bottom-style: solid;
+                      border-bottom-width: 1pt;
+                      border-bottom-color: #000000;
+                      border-left-style: solid;
+                      border-left-width: 1pt;
+                      border-left-color: #000000;
+                    "
+                  >
+                    <div class="x-p-5-0" lang="en-US">
+                      <span class="x-b-1-0" lang="en-US"
+                        ><span
+                          ><span
+                            ><span style="color: #330099"
+                              >NORMAL OPERATION</span
+                            ></span
+                          ></span
+                        ></span
+                      >
+                    </div>
+                    <div class="x-ul-1-0" lang="en-US">
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >Ignition ON</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >EMS ECU monitors the CAN message from AT
+                                TCU</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="x-p-5-0" lang="en-US">
+                      <span class="x-b-1-0" lang="en-US"
+                        ><span
+                          ><span
+                            ><span style="color: #330099"
+                              >DTC DETECTING CONDITIONS</span
+                            ></span
+                          ></span
+                        ></span
+                      >
+                    </div>
+                    <div class="x-ul-1-0" lang="en-US">
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >Ignition ON</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >EMS ECU detects an error in the Output shaft
+                                speed CAN signal from the AT TCU</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="x-p-5-0" lang="en-US">
+                      <span class="x-b-1-0" lang="en-US"
+                        ><span
+                          ><span
+                            ><span style="color: #330099"
+                              >DTC REACTIONS</span
+                            ></span
+                          ></span
+                        ></span
+                      >
+                    </div>
+                    <div class="x-ul-1-0" lang="en-US">
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >ACC disabled</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="x-p-5-0" lang="en-US">
+                      <span class="x-b-1-0" lang="en-US"
+                        ><span
+                          ><span
+                            ><span style="color: #330099"
+                              >HEALING CONDITION</span
+                            ></span
+                          ></span
+                        ></span
+                      >
+                    </div>
+                    <div class="x-ul-1-0" lang="en-US">
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >DTC will heal after fault absent</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                  <td
+                    class="entry-in-tbody"
+                    style="
+                      vertical-align: middle;
+                      padding: 3px;
+                      border-right-style: solid;
+                      border-right-width: 1pt;
+                      border-right-color: #000000;
+                      border-bottom-style: solid;
+                      border-bottom-width: 1pt;
+                      border-bottom-color: #000000;
+                    "
+                  >
+                    <div class="x-ul-1-0" lang="en-US">
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >AT TCU inputs signal invalid</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >Faults present in AT TCU</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >Faulty AT TCU</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div
+        class="x-procedure-2-0"
+        id="DTCCHECKINGPROCEDURE-04CC4D96"
+        lang="en-US"
+      >
+        <div class="x-title-2-0" id="styler-id1.1.1.14.32.3.1" lang="en-US">
+          12.30.2&nbsp;DTC CHECKING PROCEDURE
+        </div>
+        <div class="x-procbody-1-0" lang="en-US">
+          <div class="x-ul-1-0" lang="en-US">
+            <table
+              class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+              lang="en-US"
+              style="table-layout: fixed"
+            >
+              <col style="width: 0em" />
+              <col style="width: 15pt" />
+              <col />
+              <tbody>
+                <tr>
+                  <td class="x--as-table-ralign-padding"></td>
+                  <td
+                    class="x--as-table-ralign-padding x--word-break-keep"
+                    style="text-align: left"
+                  >
+                    •&nbsp;
+                  </td>
+                  <td class="x--as-table-valign-padding">
+                    <span class="x-p-3-0" lang="en-US"
+                      >Turn ON ignition and initialise i-SMART
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table
+              class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+              lang="en-US"
+              style="table-layout: fixed"
+            >
+              <col style="width: 0em" />
+              <col style="width: 15pt" />
+              <col />
+              <tbody>
+                <tr>
+                  <td class="x--as-table-ralign-padding"></td>
+                  <td
+                    class="x--as-table-ralign-padding x--word-break-keep"
+                    style="text-align: left"
+                  >
+                    •&nbsp;
+                  </td>
+                  <td class="x--as-table-valign-padding">
+                    <span class="x-p-3-0" lang="en-US"
+                      >Record DTC with freeze frame, environmental data and
+                      clear</span
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table
+              class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+              lang="en-US"
+              style="table-layout: fixed"
+            >
+              <col style="width: 0em" />
+              <col style="width: 15pt" />
+              <col />
+              <tbody>
+                <tr>
+                  <td class="x--as-table-ralign-padding"></td>
+                  <td
+                    class="x--as-table-ralign-padding x--word-break-keep"
+                    style="text-align: left"
+                  >
+                    •&nbsp;
+                  </td>
+                  <td class="x--as-table-valign-padding">
+                    <span class="x-p-3-0" lang="en-US"
+                      >Turn OFF ignition, then turn ON</span
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table
+              class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+              lang="en-US"
+              style="table-layout: fixed"
+            >
+              <col style="width: 0em" />
+              <col style="width: 15pt" />
+              <col />
+              <tbody>
+                <tr>
+                  <td class="x--as-table-ralign-padding"></td>
+                  <td
+                    class="x--as-table-ralign-padding x--word-break-keep"
+                    style="text-align: left"
+                  >
+                    •&nbsp;
+                  </td>
+                  <td class="x--as-table-valign-padding">
+                    <span class="x-p-3-0" lang="en-US"
+                      >Proceed to DIAGNOSTIC PROCEDURE, if
+                      <span class="x-b-1-0" lang="en-US">U206200</span> is
+                      present
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div
+        class="x-procedure-2-0"
+        id="DIAGNOSTICPROCEDURE-3B9BACA36"
+        lang="en-US"
+      >
+        <div class="x-title-2-0" id="styler-id1.1.1.14.32.4.1" lang="en-US">
+          12.30.3&nbsp;DIAGNOSTIC PROCEDURE
+        </div>
+        <div class="x-procbody-1-0" lang="en-US">
+          <div class="x-p-6-0" lang="en-US">
+            <span class="x-b-1-0" lang="en-US"
+              ><span
+                ><span
+                  ><span style="color: #330099; background-color: transparent"
+                    >STEP 1 – CHECK FOR DTCs</span
+                  ></span
+                ></span
+              ></span
+            >
+          </div>
+          <div class="x-table-1-0" lang="en-US">
+            <table
+              class="x-tgroup-1-0"
+              style="
+                width: 100%;
+                border-left-style: solid;
+                border-left-width: 1pt;
+                border-left-color: #000000;
+                border-top-style: solid;
+                border-top-width: 1pt;
+                border-top-color: #000000;
+                border-right-style: solid;
+                border-right-width: 1pt;
+                border-right-color: #000000;
+                border-bottom-style: solid;
+                border-bottom-width: 1pt;
+                border-bottom-color: #000000;
+              "
+            >
+              <colgroup>
+                <col style="width: 50.22421524663677%" />
+                <col style="width: 49.775784753363226%" />
+              </colgroup>
+              <tbody class="x-tbody-1-0" style="vertical-align: top">
+                <tr class="x-row-1-0">
+                  <td
+                    class="entry-in-tbody"
+                    colspan="2"
+                    style="
+                      padding: 7px;
+                      border-right-style: solid;
+                      border-right-width: 1pt;
+                      border-right-color: #000000;
+                      border-bottom-style: solid;
+                      border-bottom-width: 1pt;
+                      border-bottom-color: #000000;
+                      border-top-style: solid;
+                      border-top-width: 1pt;
+                      border-top-color: #000000;
+                      border-left-style: solid;
+                      border-left-width: 1pt;
+                      border-left-color: #000000;
+                    "
+                  >
+                    <div class="x-p-5-0" lang="en-US">
+                      <span class="x-b-1-0" lang="en-US"
+                        ><span
+                          ><span
+                            ><span style="color: #330099"
+                              >PRE CONDITION</span
+                            ></span
+                          ></span
+                        ></span
+                      >
+                    </div>
+                    <div class="x-ul-1-0" lang="en-US">
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >Turn the ignition ON</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >Connect the diagnostic tool and navigate to AT
+                                TCU</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="x-row-1-0">
+                  <td
+                    class="entry-in-tbody"
+                    colspan="2"
+                    style="
+                      padding: 7px;
+                      border-right-style: solid;
+                      border-right-width: 1pt;
+                      border-right-color: #000000;
+                      border-bottom-style: solid;
+                      border-bottom-width: 1pt;
+                      border-bottom-color: #000000;
+                      border-left-style: solid;
+                      border-left-width: 1pt;
+                      border-left-color: #000000;
+                    "
+                  >
+                    <div class="x-p-5-0" lang="en-US">
+                      <span class="x-b-1-0" lang="en-US"
+                        ><span
+                          ><span
+                            ><span style="color: #330099"
+                              >TEST PROCEDURE</span
+                            ></span
+                          ></span
+                        ></span
+                      >
+                    </div>
+                    <div class="x-ul-1-0" lang="en-US">
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >Check for any DTCs in AT TCU</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="x-row-1-0">
+                  <td
+                    class="entry-in-tbody"
+                    colspan="2"
+                    style="
+                      padding: 7px;
+                      border-right-style: solid;
+                      border-right-width: 1pt;
+                      border-right-color: #000000;
+                      border-bottom-style: solid;
+                      border-bottom-width: 1pt;
+                      border-bottom-color: #000000;
+                      border-left-style: solid;
+                      border-left-width: 1pt;
+                      border-left-color: #000000;
+                    "
+                  >
+                    <div class="x-p-5-0" lang="en-US">
+                      <span class="x-b-1-0" lang="en-US"
+                        ><span
+                          ><span
+                            ><span
+                              style="
+                                color: #330099;
+                                background-color: transparent;
+                              "
+                              >ACCEPTANCE CRITERIA</span
+                            ></span
+                          ></span
+                        ></span
+                      >
+                    </div>
+                    <div class="x-ul-1-0" lang="en-US">
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >No DTCs present</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="x-row-1-0">
+                  <td
+                    class="entry-in-tbody"
+                    colspan="2"
+                    style="
+                      text-align: center;
+                      vertical-align: middle;
+                      padding: 7px;
+                      border-right-style: solid;
+                      border-right-width: 1pt;
+                      border-right-color: #000000;
+                      border-bottom-style: solid;
+                      border-bottom-width: 1pt;
+                      border-bottom-color: #000000;
+                      border-left-style: solid;
+                      border-left-width: 1pt;
+                      border-left-color: #000000;
+                    "
+                  >
+                    <div class="x-p-5-0" lang="en-US">
+                      <span class="x-b-1-0" lang="en-US"
+                        ><span
+                          ><span
+                            ><span style="color: #330099"
+                              >ACTION TO BE TAKEN</span
+                            ></span
+                          ></span
+                        ></span
+                      >
+                    </div>
+                  </td>
+                </tr>
+                <tr class="x-row-1-0">
+                  <td
+                    class="entry-in-tbody"
+                    style="
+                      text-align: center;
+                      vertical-align: middle;
+                      padding: 7px;
+                      border-right-style: solid;
+                      border-right-width: 1pt;
+                      border-right-color: #000000;
+                      border-bottom-style: solid;
+                      border-bottom-width: 1pt;
+                      border-bottom-color: #000000;
+                      border-left-style: solid;
+                      border-left-width: 1pt;
+                      border-left-color: #000000;
+                    "
+                  >
+                    <div class="x-p-5-0" lang="en-US">
+                      <span class="x-b-1-0" lang="en-US"
+                        ><span
+                          ><span
+                            ><span style="color: #008000">OK</span></span
+                          ></span
+                        ></span
+                      >
+                    </div>
+                  </td>
+                  <td
+                    class="entry-in-tbody"
+                    style="
+                      text-align: center;
+                      vertical-align: middle;
+                      background-color: #ffffff;
+                      padding: 7px;
+                      border-right-style: solid;
+                      border-right-width: 1pt;
+                      border-right-color: #000000;
+                      border-bottom-style: solid;
+                      border-bottom-width: 1pt;
+                      border-bottom-color: #000000;
+                    "
+                  >
+                    <span
+                      ><span
+                        ><span style="">
+                          <div class="x-p-5-0" lang="en-US">
+                            <span class="x-b-1-0" lang="en-US"
+                              ><span
+                                ><span
+                                  ><span style="color: #ff0000"
+                                    >NOT OK</span
+                                  ></span
+                                ></span
+                              ></span
+                            >
+                          </div></span
+                        ></span
+                      ></span
+                    >
+                  </td>
+                </tr>
+                <tr class="x-row-1-0">
+                  <td
+                    class="entry-in-tbody"
+                    style="
+                      text-align: justify;
+                      padding: 7px;
+                      border-right-style: solid;
+                      border-right-width: 1pt;
+                      border-right-color: #000000;
+                      border-bottom-style: solid;
+                      border-bottom-width: 1pt;
+                      border-bottom-color: #000000;
+                      border-left-style: solid;
+                      border-left-width: 1pt;
+                      border-left-color: #000000;
+                    "
+                  >
+                    <div class="x-ul-1-0" lang="en-US">
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >Perform ignition toggle</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >Clear the DTC and verify</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >If the DTC is still present, contact your
+                                respective TEKline for further assistance</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                  <td
+                    class="entry-in-tbody"
+                    style="
+                      text-align: justify;
+                      padding: 7px;
+                      border-right-style: solid;
+                      border-right-width: 1pt;
+                      border-right-color: #000000;
+                      border-bottom-style: solid;
+                      border-bottom-width: 1pt;
+                      border-bottom-color: #000000;
+                    "
+                  >
+                    <div class="x-ul-1-0" lang="en-US">
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >Follow diagnostic procedure given in AT TCU
+                                diagnostic manual and resolve the DTCs</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >Clear the DTC and verify</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table
+                        class="x--listitem-as-table x-li-6-0 x--zero-left-margins"
+                        lang="en-US"
+                        style="table-layout: fixed"
+                      >
+                        <col style="width: 0em" />
+                        <col style="width: 15pt" />
+                        <col />
+                        <tbody>
+                          <tr>
+                            <td class="x--as-table-ralign-padding"></td>
+                            <td
+                              class="x--as-table-ralign-padding x--word-break-keep"
+                              style="text-align: left"
+                            >
+                              •&nbsp;
+                            </td>
+                            <td class="x--as-table-valign-padding">
+                              <span class="x-p-3-0" lang="en-US"
+                                >If the DTC is still present, contact your
+                                respective TEKline for further assistance</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
