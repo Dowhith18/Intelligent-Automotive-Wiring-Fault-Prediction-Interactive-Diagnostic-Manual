@@ -69,4 +69,4 @@ def combine_html_files(folder_path, output_file='combined_ems_ecu.html'):
 
 # Example usage:
 if __name__ == '__main__':
-    combine_html_files('EMS ECU', 'combined_ems_ecu_documentation.html')
+    combine_html_files('EMS_ECU', 'combined_ems_ecu_documentation.html')
