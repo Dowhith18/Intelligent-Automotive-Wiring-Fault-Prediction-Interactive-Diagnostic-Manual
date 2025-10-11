@@ -51,8 +51,30 @@ def combine_html_files(folder_path, output_file='combined_ems_ecu.html'):
                         start = content.lower().find('<body')
                         start = content.find('>', start) + 1
                         end = content.lower().rfind('</body>')
+                        # If no </body> tag, use </html> as fallback
+                        if end == -1:
+                            end = content.lower().rfind('</html>')
                         if end > start:
                             content = content[start:end]
+                    else:
+                        # For files without body tag (e.g., framesets), try to extract content
+                        # Remove DOCTYPE declaration
+                        if '<!doctype' in content.lower():
+                            doctype_start = content.lower().find('<!doctype')
+                            doctype_end = content.find('>', doctype_start)
+                            if doctype_end != -1:
+                                content = content[:doctype_start] + content[doctype_end + 1:]
+                        
+                        # Remove <html> opening tag
+                        if '<html' in content.lower():
+                            html_start = content.lower().find('<html')
+                            html_end = content.find('>', html_start)
+                            if html_end != -1:
+                                content = content[:html_start] + content[html_end + 1:]
+                        
+                        # Remove </html> closing tag
+                        if '</html>' in content.lower():
+                            content = content[:content.lower().rfind('</html>')]
                     
                     out_f.write(content)
                     out_f.write('\n')
