@@ -150,7 +150,6 @@ def dtc_detail(code):
     # We pass the list of all codes here too, so the sidebar works
     return render_template('dtc_detail.html', code=code, data=data, dtc_codes=all_dtc_codes, user=session.get('user'), role=session.get('role'))
 
-# REMOVED FOR VERCEL DEPLOYMENT
-# Vercel handles starting the server automatically
-# if __name__ == '__main__':
-#     app.run(debug=True)
+# Local development server
+if __name__ == '__main__':
+    app.run(debug=True, host='127.0.0.1', port=5000)
