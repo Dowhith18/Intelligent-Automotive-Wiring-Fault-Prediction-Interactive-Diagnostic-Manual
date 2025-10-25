@@ -28,6 +28,8 @@ A comprehensive Flask-based web application for automotive diagnostics, featurin
 - pip (Python package installer)
 - Virtual environment (recommended)
 
+**Windows (recommended)**: Installing binary scientific packages (numpy, pandas, matplotlib) with pip on Windows can fail when compiled wheels are not available for your Python version. For a smooth setup on Windows prefer using Miniconda/Anaconda and the provided conda environment file below.
+
 ## 🛠️ Installation
 
 ### 1. Clone the repository
@@ -54,6 +56,14 @@ source venv/bin/activate
 ### 3. Install dependencies
 
 ```bash
+pip install -r requirements.txt
+```
+
+If `pip install` fails on Windows due to building binary packages (errors during numpy/pandas install), use the provided `environment-windows.yml` with conda instead:
+
+```powershell
+conda env create -f environment-windows.yml
+conda activate iawfpidm
 pip install -r requirements.txt
 ```
 

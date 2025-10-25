@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 import json
 import os
 from werkzeug.utils import secure_filename
-from analysis import generate_dashboard
+# Import generate_dashboard lazily to avoid hard dependency at startup (pandas/numpy binary issues on some systems)
+
 import uuid
 
 app = Flask(__name__)
@@ -10,6 +11,7 @@ app.secret_key = 'your-secret-key-change-this-in-production'  # Change this to a
 
 # Upload configuration
 UPLOAD_FOLDER = 'uploads'
+# Primary demo folder (optional). If demo files aren't present there, we will fall back to UPLOAD_FOLDER.
 DEMO_FOLDER = os.path.join('instance', 'demo')
 ALLOWED_EXTENSIONS = {'csv'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -233,10 +235,16 @@ def upload_diagnostic_data():
     if 'user' not in session:
         return jsonify({'error': 'Unauthorized'}), 401
     
-    if 'csv_files' not in request.files:
+    # Accept either 'csv_files' (used by JS) or 'csv_file' (form fallback)
+    files = []
+    if 'csv_files' in request.files:
+        files = request.files.getlist('csv_files')
+    elif 'csv_file' in request.files:
+        # Single-file form fallback
+        files = request.files.getlist('csv_file')
+
+    if not files:
         return jsonify({'error': 'No file provided'}), 400
-    
-    files = request.files.getlist('csv_files')
     uploaded_files = []
     trip_data = None
     
@@ -249,12 +257,14 @@ def upload_diagnostic_data():
             file.save(filepath)
             uploaded_files.append(filename)
             
-            # Try to analyze the first file for trip data
+            # Try to analyze the first file for trip data (import lazily)
             if trip_data is None:
                 try:
+                    from analysis import generate_dashboard
                     trip_data = generate_dashboard(filepath)
                 except Exception as e:
-                    print(f"Error analyzing trip data: {e}")
+                    # Log the exception for easier debugging and continue (upload may still succeed)
+                    print(f"Error analyzing trip data for {filepath}: {e}")
     
     if not uploaded_files:
         return jsonify({'error': 'No valid CSV files uploaded'}), 400
@@ -273,11 +283,12 @@ def upload_diagnostic_data():
 @app.route('/load-demo-data/<demo_type>')
 def load_demo_data(demo_type):
     """Loads demo diagnostic data for analysis."""
-    if 'user' not in session:
-        return jsonify({'error': 'Unauthorized'}), 401
+    # Allow demo loading without authentication so users can try the app quickly
     
     demo_files = {
-        'highway': 'phoenix-to-tempe.csv',
+        # Prefer bundled demo files. If a specific demo isn't present, it will fall back to uploads/.
+        # The repo includes 'grocery-run.csv' and 'idling-20.csv' under uploads/.
+        'highway': 'grocery-run.csv',
         'city': 'grocery-run.csv',
         'idling': 'idling-20.csv'
     }
@@ -286,39 +297,48 @@ def load_demo_data(demo_type):
     if not demo_file:
         return jsonify({'error': 'Invalid demo type'}), 400
     
+    # Prefer instance/demo, but fall back to uploads/ for demo assets that ship in the repo
     demo_path = os.path.join(DEMO_FOLDER, demo_file)
+    if not os.path.exists(demo_path):
+        demo_path = os.path.join(UPLOAD_FOLDER, demo_file)
     
     if not os.path.exists(demo_path):
         return jsonify({'error': f'Demo file not found: {demo_file}'}), 404
     
     try:
+        from analysis import generate_dashboard
         trip_data = generate_dashboard(demo_path)
         return jsonify({
             'success': True, 
             'data': {
                 'name': demo_type.capitalize() + ' Demo',
-                'trip_info': trip_data['trip_info'],
+                'trip_info': trip_data.get('trip_info') if isinstance(trip_data, dict) else None,
                 'has_charts': True
             }
         })
     except Exception as e:
+        # If analysis module isn't available or fails, return a clear error so frontend can handle it
+        print(f"Failed to analyze demo data {demo_path}: {e}")
         return jsonify({'error': f'Failed to analyze demo data: {str(e)}'}), 500
 
 @app.route('/trip-dashboard/<trip_id>')
 def trip_dashboard(trip_id):
     """Renders the OBD-II trip analysis dashboard."""
-    if 'user' not in session:
-        return redirect(url_for('login'))
-    
-    # Check for demo files first
+    # Allow demo trip dashboards to be viewed without login
     demo_files = {
         'highway': 'phoenix-to-tempe.csv',
         'city': 'grocery-run.csv',
         'idling': 'idling-20.csv'
     }
+    if trip_id not in demo_files and 'user' not in session:
+        return redirect(url_for('login'))
+    # Check for demo files first (demo_files defined above)
     
     if trip_id in demo_files:
+        # Prefer instance/demo, but fall back to uploads/ if missing
         csv_path = os.path.join(DEMO_FOLDER, demo_files[trip_id])
+        if not os.path.exists(csv_path):
+            csv_path = os.path.join(UPLOAD_FOLDER, demo_files[trip_id])
     else:
         csv_path = os.path.join(app.config['UPLOAD_FOLDER'], trip_id)
     
@@ -326,6 +346,7 @@ def trip_dashboard(trip_id):
         return "Trip data not found", 404
     
     try:
+        from analysis import generate_dashboard
         trip_data = generate_dashboard(csv_path)
         return render_template('trip_dashboard.html', 
                              trip_data=trip_data, 
@@ -333,6 +354,7 @@ def trip_dashboard(trip_id):
                              user=session.get('user'), 
                              role=session.get('role'))
     except Exception as e:
+        print(f"Error generating dashboard for {csv_path}: {e}")
         return f"Error generating dashboard: {str(e)}", 500
 
 # Local development server

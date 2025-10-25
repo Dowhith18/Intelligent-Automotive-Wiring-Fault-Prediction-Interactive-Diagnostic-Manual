@@ -509,7 +509,7 @@
             });
         });
 
-        // Demo data buttons
+        // Demo data buttons - call server first to attempt analysis, then navigate if successful
         document.querySelectorAll('.demo-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const demoType = this.getAttribute('data-demo');
@@ -517,8 +517,24 @@
                 this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
                 this.disabled = true;
 
-                // Redirect to trip dashboard for demo data
-                window.location.href = `/trip-dashboard/${demoType}`;
+                fetch(`/load-demo-data/${demoType}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.success) {
+                            // Analysis succeeded on server; navigate to dashboard view
+                            window.location.href = `/trip-dashboard/${demoType}`;
+                        } else {
+                            const err = data && data.error ? data.error : 'Unknown error while loading demo data';
+                            alert('Demo load failed: ' + err);
+                        }
+                    })
+                    .catch(err => {
+                        alert('Demo load failed: ' + err.message);
+                    })
+                    .finally(() => {
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    });
             });
         });
     </script>
