@@ -1,24 +1,227 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>DTC Details</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bundle.css') }}">
-</head>
-<body>
-    <h1>DTC: {{ code }}</h1>
-    {% for title, data in data.items() %}
-    <div class="x-procedure-2-0">
-        <div class="x-title-2-0">{{ title }}</div>
-        <div class="x-procbody-1-0">
-            {% if data.type == 'image' %}
-                <img src="{{ url_for('static', filename=data.content) }}" alt="{{ title }}">
-            {% elif data.type == 'html' %}
-                {{ data.content | safe }}
-            {% elif data.type == 'text' %}
-                <pre>{{ data.content }}</pre>
-            {% endif %}
-        </div>
+{% extends "base.html" %}
+
+{% block title %}DTC: {{ code }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2>DTC: {{ code }}</h2>
+        <p>Diagnostic Trouble Code Information</p>
     </div>
-    {% endfor %}
-</body>
-</html>
+    <a href="{{ url_for('dtc_lookup') }}" class="btn btn--secondary">← Back to DTC Lookup</a>
+</div>
+
+<style>
+    .image-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 20px 0;
+        position: relative;
+    }
+    
+    .zoom-controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+        background: var(--bg-card);
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .zoom-btn {
+        padding: 8px 16px;
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s;
+    }
+    
+    .zoom-btn:hover {
+        background-color: var(--accent-hover);
+        transform: translateY(-2px);
+    }
+    
+    .zoom-btn:active {
+        transform: scale(0.95);
+    }
+    
+    .zoomable-image-wrapper {
+        overflow: auto;
+        max-width: 100%;
+        max-height: 80vh;
+        background: var(--bg-card);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .zoomable-image {
+        transition: transform 0.3s ease;
+        cursor: grab;
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        object-fit: contain;
+    }
+    
+    .zoomable-image:active {
+        cursor: grabbing;
+    }
+    
+    .zoom-level {
+        font-size: 14px;
+        color: var(--text-secondary);
+        margin: 0 10px;
+        align-self: center;
+        font-weight: 600;
+    }
+    
+    .x-procedure-2-0 {
+        margin-bottom: 30px;
+    }
+    
+    .x-title-2-0 {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 15px;
+        padding: 12px 15px;
+        background: var(--bg-hover);
+    }
+    
+    .x-procbody-1-0 {
+        background: var(--bg-card);
+        padding: 20px;
+    }
+    
+    .x-procbody-1-0 pre {
+        background: var(--metric-bg);
+        padding: 15px;
+        color: var(--text-primary);
+        overflow-x: auto;
+    }
+    
+    .x-procbody-1-0 table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 10px 0;
+    }
+    
+    .x-procbody-1-0 table th {
+        background: var(--accent-color);
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+    }
+    
+    .x-procbody-1-0 table td {
+        padding: 12px;
+        color: var(--text-primary);
+    }
+    
+    .x-procbody-1-0 table tr:nth-child(even) {
+        background: var(--metric-bg);
+    }
+</style>
+
+{% for title, data in data.items() %}
+<div class="x-procedure-2-0">
+    <div class="x-title-2-0">{{ title }}</div>
+    <div class="x-procbody-1-0">
+        {% if data.type == 'image' %}
+            <div class="image-container">
+                <div class="zoom-controls">
+                    <button class="zoom-btn zoom-out" onclick="zoomImage(this, -0.2)">−</button>
+                    <span class="zoom-level">100%</span>
+                    <button class="zoom-btn zoom-in" onclick="zoomImage(this, 0.2)">+</button>
+                    <button class="zoom-btn zoom-reset" onclick="resetZoom(this)">Reset</button>
+                </div>
+                <div class="zoomable-image-wrapper">
+                    <img src="{{ url_for('static', filename=data.content) }}" 
+                         alt="{{ title }}" 
+                         class="zoomable-image"
+                         data-zoom="1">
+                </div>
+            </div>
+        {% elif data.type == 'html' %}
+            {{ data.content | safe }}
+        {% elif data.type == 'text' %}
+            <pre>{{ data.content }}</pre>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+
+<script>
+    function zoomImage(button, delta) {
+        const container = button.closest('.image-container');
+        const img = container.querySelector('.zoomable-image');
+        const zoomLevel = container.querySelector('.zoom-level');
+        
+        let currentZoom = parseFloat(img.dataset.zoom || 1);
+        currentZoom = Math.max(0.2, Math.min(3, currentZoom + delta));
+        
+        img.dataset.zoom = currentZoom;
+        img.style.transform = `scale(${currentZoom})`;
+        zoomLevel.textContent = `${Math.round(currentZoom * 100)}%`;
+    }
+    
+    function resetZoom(button) {
+        const container = button.closest('.image-container');
+        const img = container.querySelector('.zoomable-image');
+        const zoomLevel = container.querySelector('.zoom-level');
+        
+        img.dataset.zoom = 1;
+        img.style.transform = 'scale(1)';
+        zoomLevel.textContent = '100%';
+    }
+    
+    // Add drag to pan functionality
+    document.querySelectorAll('.zoomable-image-wrapper').forEach(wrapper => {
+        let isDragging = false;
+        let startX, startY, scrollLeft, scrollTop;
+        
+        wrapper.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.pageX - wrapper.offsetLeft;
+            startY = e.pageY - wrapper.offsetTop;
+            scrollLeft = wrapper.scrollLeft;
+            scrollTop = wrapper.scrollTop;
+        });
+        
+        wrapper.addEventListener('mouseleave', () => {
+            isDragging = false;
+        });
+        
+        wrapper.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+        
+        wrapper.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.pageX - wrapper.offsetLeft;
+            const y = e.pageY - wrapper.offsetTop;
+            const walkX = (x - startX) * 2;
+            const walkY = (y - startY) * 2;
+            wrapper.scrollLeft = scrollLeft - walkX;
+            wrapper.scrollTop = scrollTop - walkY;
+        });
+    });
+    
+    // Show DTC codes section in sidebar
+    document.addEventListener('DOMContentLoaded', function() {
+        const dtcSection = document.getElementById('dtc-codes-section');
+        if (dtcSection) {
+            dtcSection.style.display = 'block';
+        }
+    });
+</script>
+{% endblock %}

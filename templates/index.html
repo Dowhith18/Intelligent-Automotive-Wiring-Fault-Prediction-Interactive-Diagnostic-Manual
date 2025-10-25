@@ -1,10 +1,78 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Home - DTC Diagnostics
+    Dashboard - DTC Diagnostics
 {% endblock %}
 
 {% block content %}
-    <h1>Welcome to the Diagnostic Assistant</h1>
-    <p>Please select a Diagnostic Trouble Code (DTC) from the list on the left to view the details.</p>
+    <div class="page-header">
+        <div>
+            <h2>Vehicle Dashboard</h2>
+            <p>Real-time vehicle diagnostics and AI analysis</p>
+        </div>
+        <div class="dashboard-controls">
+            <button class="btn btn--secondary btn--sm" id="refresh-data-btn">Refresh Data</button>
+            <button class="btn btn--primary btn--sm" id="export-report-btn">Export Report</button>
+        </div>
+    </div>
+    
+    <div class="dashboard-grid">
+        <!-- Vehicle Metrics -->
+        <div class="card metrics-card">
+            <h3>Vehicle Metrics</h3>
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <label>Odometer</label>
+                    <div class="value" id="odometer-value">-- km</div>
+                </div>
+                <div class="metric-item">
+                    <label>Battery Voltage</label>
+                    <div class="value" id="battery-voltage">--V</div>
+                </div>
+                <div class="metric-item">
+                    <label>Engine RPM</label>
+                    <div class="value" id="engine-rpm">--</div>
+                </div>
+                <div class="metric-item">
+                    <label>Vehicle Speed</label>
+                    <div class="value" id="vehicle-speed">-- km/h</div>
+                </div>
+                <div class="metric-item">
+                    <label>Engine State</label>
+                    <div class="value" id="engine-state">--</div>
+                </div>
+                <div class="metric-item">
+                    <label>Electrical Health</label>
+                    <div class="value" id="electrical-health">--%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ECU Status Grid -->
+        <div class="card ecu-card">
+            <h3>ECU Status</h3>
+            <div class="ecu-grid" id="ecu-grid">
+                <!-- ECU cards will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Fault Predictions -->
+        <div class="card predictions-card">
+            <h3>AI Fault Predictions</h3>
+            <div class="predictions-list" id="predictions-list">
+                <!-- Predictions will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+            <h3>Quick Actions</h3>
+            <div class="quick-actions-grid">
+                <button class="action-btn" onclick="toggleDTCList()">View DTCs</button>
+                <button class="action-btn" onclick="window.location.href='#ai-analysis'">AI Analysis</button>
+                <button class="action-btn" onclick="clearDTCs()">Clear DTCs</button>
+                <button class="action-btn" onclick="window.location.href='/dtc-lookup'">Procedures</button>
+            </div>
+        </div>
+    </div>
 {% endblock %}

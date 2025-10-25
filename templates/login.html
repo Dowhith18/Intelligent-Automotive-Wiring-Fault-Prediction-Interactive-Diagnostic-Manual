@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/diagnostic_app.css') }}">
+    <title>Login - AutoDiag Pro</title>
+</head>
+<body>
+<div class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>AutoDiag Pro</h1>
+                <p>Professional Vehicle Diagnostic System</p>
+            </div>
+            
+            {% if error %}
+            <div class="alert alert-error">
+                {{ error }}
+            </div>
+            {% endif %}
+            
+            <form method="POST" action="{{ url_for('login') }}" class="login-form">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-control" name="username" placeholder="Enter username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password" placeholder="Enter password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <select class="form-control" name="role">
+                        <option value="admin">Administrator</option>
+                        <option value="technician">Technician</option>
+                        <option value="viewer">Viewer</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn--primary btn--full-width">Sign In</button>
+                
+                <div class="login-info">
+                    <p><strong>Demo Credentials:</strong></p>
+                    <p>Username: <code>admin</code></p>
+                    <p>Password: <code>admin123</code></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e3f2fd 100%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.login-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header h1 {
+    color: #1976d2;
+    font-size: 32px;
+    margin: 0 0 10px 0;
+    font-weight: 700;
+}
+
+.login-header p {
+    color: #546e7a;
+    font-size: 14px;
+    margin: 0;
+}
+
+.login-form {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #1a1a1a;
+    font-size: 14px;
+}
+
+.btn--full-width {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    margin-top: 10px;
+    background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+    border: none;
+    color: #ffffff;
+}
+
+.btn--full-width:hover {
+    background: linear-gradient(135deg, #1565c0 0%, #1976d2 100%);
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+}
+
+.alert {
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.alert-error {
+    background: rgba(211, 47, 47, 0.1);
+    color: #d32f2f;
+    border: 1px solid rgba(211, 47, 47, 0.3);
+}
+
+.login-info {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.login-info p {
+    color: #546e7a;
+    font-size: 13px;
+    margin: 5px 0;
+}
+
+.login-info strong {
+    color: #1a1a1a;
+}
+
+.login-info code {
+    background: rgba(25, 118, 210, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: #1976d2;
+    font-family: 'Courier New', monospace;
+    border: 1px solid rgba(25, 118, 210, 0.2);
+}
+</style>
+</body>
+</html>

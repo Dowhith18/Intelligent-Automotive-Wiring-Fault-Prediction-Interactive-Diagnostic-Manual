@@ -27,3 +27,40 @@ document.addEventListener('DOMContentLoaded', function () {
     // Attach the mousedown event listener to the resizer
     resizer.addEventListener('mousedown', mouseDownHandler);
 });
+
+// Toggle DTC codes list
+function toggleDTCList() {
+    const dtcSection = document.getElementById('dtc-codes-section');
+    if (dtcSection) {
+        dtcSection.style.display = dtcSection.style.display === 'none' ? 'block' : 'none';
+    }
+}
+
+// Theme toggle functionality
+function toggleTheme() {
+    const body = document.body;
+    const themeIcon = document.querySelector('.theme-icon');
+    const currentTheme = body.getAttribute('data-theme');
+    
+    if (currentTheme === 'light') {
+        body.setAttribute('data-theme', 'dark');
+        themeIcon.textContent = '🌙';
+        localStorage.setItem('theme', 'dark');
+    } else {
+        body.setAttribute('data-theme', 'light');
+        themeIcon.textContent = '☀️';
+        localStorage.setItem('theme', 'light');
+    }
+}
+
+// Load saved theme on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    const themeIcon = document.querySelector('.theme-icon');
+    
+    document.body.setAttribute('data-theme', savedTheme);
+    
+    if (themeIcon) {
+        themeIcon.textContent = savedTheme === 'light' ? '☀️' : '🌙';
+    }
+});

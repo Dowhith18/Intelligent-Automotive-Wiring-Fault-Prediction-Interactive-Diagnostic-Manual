@@ -1,10 +1,62 @@
+/* CSS Variables for Theming - Professional Light Theme */
+:root {
+    /* Primary Colors */
+    --primary-blue: #1976d2;
+    --primary-blue-dark: #1565c0;
+    --primary-blue-light: #42a5f5;
+    --accent-blue: #2196f3;
+    
+    /* Background Colors */
+    --bg-primary: #f5f7fa;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --bg-hover: #e3f2fd;
+    --bg-input: #ffffff;
+    
+    /* Text Colors */
+    --text-primary: #1a1a1a;
+    --text-secondary: #546e7a;
+    --text-muted: #90a4ae;
+    
+    /* Accent Colors */
+    --accent-color: #1976d2;
+    --accent-hover: #1565c0;
+    --accent-light: #42a5f5;
+    
+    /* Status Colors */
+    --success-color: #00c853;
+    --success-bg: rgba(0, 200, 83, 0.1);
+    --warning-color: #ff9500;
+    --warning-bg: rgba(255, 149, 0, 0.1);
+    --error-color: #d32f2f;
+    --error-bg: rgba(211, 47, 47, 0.1);
+    --info-color: #0288d1;
+    --info-bg: rgba(2, 136, 209, 0.1);
+    
+    /* Border & Divider */
+    --border-color: #e0e0e0;
+    --divider-color: #f0f0f0;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.16);
+    
+    /* Component Specific */
+    --metric-bg: #f5f7fa;
+    --input-bg: #ffffff;
+    --sidebar-width: 250px;
+}
+
 /* Basic styles for the entire page */
 body, html {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     height: 100%;
-    background-color: #f4f4f4;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Main container for the two-column layout */
@@ -15,40 +67,179 @@ body, html {
 
 /* Left-side navigation bar */
 .sidebar {
-    width: 25%;
-    max-width: 300px;
-    background-color: #fff;
-    border-right: 1px solid #ccc;
-    padding: 20px;
+    width: 180px;
+    max-width: 200px;
+    background-color: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    padding: 20px 0;
     overflow-y: auto; /* Adds a scrollbar if content is too long */
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar-header {
+    padding: 20px;
+    margin-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--accent-color);
+    border-bottom: 3px solid var(--accent-light);
+    box-shadow: var(--shadow-sm);
 }
 
 .sidebar h2 {
     margin-top: 0;
-    color: #333;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* Remove Ford logo styles */
+.brand-logo {
+    display: none;
+}
+
+.theme-toggle {
+    background: var(--metric-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background: var(--bg-hover);
+    transform: scale(1.1);
+}
+
+.theme-icon {
+    font-size: 18px;
 }
 
 .sidebar ul {
     list-style-type: none;
-    padding: 0;
+    padding: 10px 0;
+    margin: 0;
+}
+
+.sidebar li {
+    margin: 2px 8px;
 }
 
 .sidebar li a {
-    display: block;
-    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
     text-decoration: none;
-    color: #007bff;
-    border-radius: 4px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar li a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: var(--accent-light);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
 }
 
 .sidebar li a:hover {
-    background-color: #e9ecef;
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    transform: translateX(4px);
+    box-shadow: var(--shadow-sm);
+}
+
+.sidebar li a:hover::before {
+    transform: scaleY(1);
+}
+
+.sidebar li a.active {
+    background: linear-gradient(90deg, var(--accent-color) 0%, var(--bg-hover) 100%);
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: var(--shadow-md);
+}
+
+.sidebar li a.active::before {
+    transform: scaleY(1);
+    width: 100%;
+    background: transparent;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 20px;
+    border-top: 2px solid var(--border-color);
+    background: var(--bg-secondary);
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.user-info {
+    margin-bottom: 15px;
+    padding: 12px;
+    background: var(--bg-hover);
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-light);
+}
+
+.user-name {
+    margin: 0 0 6px 0;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-name::before {
+    content: '👤';
+    font-size: 18px;
+}
+
+.user-role {
+    margin: 0;
+    color: var(--accent-color);
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--accent-color);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.user-role {
+    margin: 5px 0 0 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+    text-transform: capitalize;
 }
 
 /* Right-side content area */
 .content {
     flex-grow: 1; /* Takes up the remaining space */
     padding: 30px;
+    background-color: var(--bg-primary);
     overflow-y: auto;
 }
 
@@ -123,8 +314,322 @@ img {
 
 /* Style for the resizer handle */
 .resizer {
-    width: 5px;
-    cursor: col-resize; /* Changes the mouse cursor to a resize icon */
-    background-color: #ddd;
+    width: 4px;
+    cursor: col-resize;
+    background: var(--border-color);
     height: 100vh;
+    transition: all 0.3s ease;
+}
+
+.resizer:hover {
+    width: 6px;
+    background: var(--accent-light);
+    box-shadow: var(--shadow-sm);
+}
+
+/* ==== FORD DIAGNOSTICS UI COMPONENTS ==== */
+
+/* Button Styles */
+.btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn--primary {
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
+    color: #ffffff;
+}
+
+.btn--primary:hover {
+    background: linear-gradient(135deg, var(--accent-hover) 0%, var(--accent-color) 100%);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn--secondary {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+}
+
+.btn--secondary:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent-light);
+    transform: translateY(-2px);
+}
+
+.btn--sm {
+    padding: 8px 16px;
+    font-size: 12px;
+}
+
+.btn--full-width {
+    width: 100%;
+}
+
+/* Card Styles */
+.card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-light) 100%);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card h3 {
+    margin-top: 0;
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card h3::before {
+    content: '';
+    width: 4px;
+    height: 24px;
+    background: var(--accent-light);
+    border-radius: 2px;
+}
+
+/* Status Badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    gap: 6px;
+}
+
+.badge--success {
+    background: var(--success-bg);
+    color: var(--success-color);
+    border: 1px solid var(--success-color);
+}
+
+.badge--warning {
+    background: var(--warning-bg);
+    color: var(--warning-color);
+    border: 1px solid var(--warning-color);
+}
+
+.badge--error {
+    background: var(--error-bg);
+    color: var(--error-color);
+    border: 1px solid var(--error-color);
+}
+
+.badge--info {
+    background: var(--info-bg);
+    color: var(--info-color);
+    border: 1px solid var(--info-color);
+}
+
+/* Form Controls */
+.form-control {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--input-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--accent-light);
+    box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
+    background: var(--bg-card);
+}
+
+.form-control::placeholder {
+    color: var(--text-muted);
+}
+
+/* Page Headers */
+.page-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid var(--border-color);
+    position: relative;
+}
+
+.page-header::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 120px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-light) 100%);
+}
+
+.page-header h1,
+.page-header h2 {
+    margin: 0 0 8px 0;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.page-header p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* Alert Messages */
+.alert {
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    border-left: 4px solid;
+}
+
+.alert-success {
+    background: var(--success-bg);
+    color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.alert-warning {
+    background: var(--warning-bg);
+    color: var(--warning-color);
+    border-color: var(--warning-color);
+}
+
+.alert-error {
+    background: var(--error-bg);
+    color: var(--error-color);
+    border-color: var(--error-color);
+}
+
+.alert-info {
+    background: var(--info-bg);
+    color: var(--info-color);
+    border-color: var(--info-color);
+}
+
+/* Loading States */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.loading {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 5px;
+    border: 2px solid var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-light);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 220px;
+    }
+    
+    .content {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .resizer {
+        display: none;
+    }
+    
+    .content::before {
+        left: 0;
+    }
 }

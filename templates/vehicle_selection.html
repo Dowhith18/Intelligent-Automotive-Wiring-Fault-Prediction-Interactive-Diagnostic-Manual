@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Vehicle Selection - DTC Diagnostics
+{% endblock %}
+
+{% block content %}
+    <div class="vehicle-selection-content">
+        <div class="page-header" style="max-width: 600px; margin: 40px auto 20px;">
+            <div>
+                <h2>Vehicle Selection</h2>
+                <p>Enter VIN or scan with OCR to detect vehicle</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="form-group">
+                <label class="form-label">Vehicle Identification Number (VIN)</label>
+                <input type="text" class="form-control" id="vin-input" placeholder="Enter 17-character VIN" maxlength="17">
+            </div>
+            <div class="button-group">
+                <button class="btn btn--secondary" id="ocr-scan-btn">OCR Scan</button>
+                <button class="btn btn--primary" id="detect-vehicle-btn">Detect Vehicle</button>
+            </div>
+        </div>
+        
+        <div id="vehicle-info" class="card hidden">
+            <h3>Vehicle Detected</h3>
+            <div class="vehicle-details">
+                <p><strong>Model:</strong> <span id="vehicle-model">--</span></p>
+                <p><strong>VIN:</strong> <span id="vehicle-vin">--</span></p>
+            </div>
+            <button class="btn btn--primary" id="start-diagnostic-btn">Start Diagnostic</button>
+        </div>
+    </div>
+    
+    <script>
+        // Start Diagnostic button handler
+        document.getElementById('start-diagnostic-btn').addEventListener('click', function() {
+            const vin = document.getElementById('vehicle-vin').textContent;
+            const model = document.getElementById('vehicle-model').textContent;
+            
+            // Send vehicle info to backend
+            fetch('/start-diagnostic', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    vin: vin,
+                    model: model
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error starting diagnostic');
+            });
+        });
+    </script>
+{% endblock %}
