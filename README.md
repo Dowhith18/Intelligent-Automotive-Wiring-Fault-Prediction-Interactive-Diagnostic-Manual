@@ -1,14 +1,20 @@
-# Intelligent Automotive Wiring Fault Prediction & Interactive Diagnostic Manual
+# IAWFPIDM
+
+## Intelligent Automotive Wiring Fault Prediction & Interactive Diagnostic Manual
 
 A comprehensive Flask-based web application for automotive diagnostics, featuring an interactive diagnostic trouble code (DTC) lookup system and intelligent fault prediction capabilities.
 
 ## 🚗 Features
 
 - **Interactive DTC Lookup Database**: Search and browse thousands of diagnostic trouble codes
+- **Intelligent Fault Prediction**: Real-time analysis of engine sensors and wiring faults
+- **Engine-Specific Diagnostics**: Detailed fault predictions for critical components (Fuel Pump Relay, Fuel Injectors)
 - **Detailed Diagnostic Information**: Step-by-step troubleshooting guides for each DTC
+- **Vehicle Dashboard**: Real-time vehicle diagnostics with 6 key metrics (Odometer, Battery Voltage, RPM, Speed, Engine State, Electrical Health)
+- **OBD-II Trip Analysis**: Comprehensive trip data analysis with interactive charts and statistics
 - **Vehicle Selection Interface**: Record vehicle information before starting diagnostics
 - **User Authentication**: Role-based access control (Admin, Technician, Viewer)
-- **Responsive Design**: Modern, user-friendly interface
+- **Responsive Design**: Modern, user-friendly interface with dark/light theme support
 - **Real-time Search**: Quick filtering and navigation through DTC codes
 - **Comprehensive Coverage**: Supports multiple automotive systems:
   - Engine Management (P-codes)
@@ -91,12 +97,18 @@ The application comes with three pre-configured users:
 ├── static/                             # Static assets
 │   ├── css/
 │   │   ├── diagnostic_app.css         # Application styles
-│   │   └── style.css                  # Additional styles
-│   └── js/                            # JavaScript files
+│   │   └── style.css                  # Main application styles
+│   ├── js/
+│   │   └── diagnostic_app.js          # Frontend logic & fault predictions
+│   ├── logo.png                       # Application logo (50x50px recommended)
+│   └── EMS_ECU/                       # EMS/ECU documentation assets
 ├── templates/                          # HTML templates
-│   ├── index.html                     # Dashboard/home page
+│   ├── base.html                      # Base template with navigation
+│   ├── index.html                     # Dashboard/home page with fault predictions
 │   ├── login.html                     # Login page
 │   ├── vehicle_selection.html         # Vehicle info capture
+│   ├── analysis.html                  # Analysis & Statistics page
+│   ├── trip_dashboard.html            # OBD-II Trip Analysis with charts
 │   ├── dtc_lookup.html                # DTC database table
 │   └── dtc_detail.html                # Individual DTC details
 ├── EMS_ECU/                            # EMS/ECU documentation files
@@ -139,13 +151,41 @@ print(secrets.token_hex(16))
 - **System Categories**: Organized by automotive system (Fuel, Ignition, Emissions, etc.)
 - **Severity Ratings**: High, Medium, Low priority classification
 
+### Intelligent Fault Prediction
+
+- **Engine-Specific Analysis**: Real-time monitoring of critical engine components
+- **Wiring Fault Detection**: Identifies open circuits, short circuits, and ground faults
+- **Fault Impact Assessment**: Shows immediate and potential impacts on vehicle operation
+- **Actionable Recommendations**: Provides specific repair guidance for each fault
+- **Current Fault Examples**:
+  - **P062700**: Fuel Pump Relay Control Circuit (Open Circuit) - High Severity
+  - **P026100**: Fuel Injector 1 Control Circuit (Short to Ground) - High Severity
+
+### Vehicle Dashboard Metrics
+
+- **Odometer Reading**: Track vehicle mileage
+- **Battery Voltage**: Monitor electrical system health (13.8V nominal)
+- **Engine RPM**: Real-time engine speed monitoring
+- **Vehicle Speed**: Current speed in km/h
+- **Engine State**: Running status indicator
+- **Electrical Health**: Overall electrical system percentage (0-100%)
+
+### OBD-II Trip Analysis
+
+- **Interactive Charts**: Four fullscreen-capable visualization charts
+- **Trip Statistics**: Distance, duration, fuel efficiency, average speed
+- **Data Export**: CSV upload for historical trip data analysis
+- **Comprehensive Insights**: Detailed breakdown of driving behavior and vehicle performance
+
 ### Diagnostic Workflow
 
 1. **Login**: Authenticate with role-based credentials
-2. **Vehicle Selection**: Enter VIN and vehicle details
-3. **Dashboard**: Access quick search and navigation
-4. **DTC Lookup**: Browse or search the complete DTC database
-5. **Detailed Diagnostics**: View step-by-step troubleshooting guides
+2. **Vehicle Selection**: Enter VIN and vehicle details (Make, Model, Year)
+3. **Dashboard**: View real-time metrics and fault predictions
+4. **Analysis & Statistics**: Upload trip data for comprehensive analysis
+5. **OBD-II Trip Dashboard**: Interactive charts and driving behavior insights
+6. **DTC Lookup**: Browse or search the complete DTC database
+7. **Detailed Diagnostics**: View step-by-step troubleshooting guides with images
 
 ## 🌐 Deployment
 
@@ -183,6 +223,9 @@ vercel
 ## 📦 Dependencies
 
 - **Flask 3.1.2**: Web framework
+- **pandas 2.2.3**: Data analysis and manipulation
+- **matplotlib 3.9.3**: Plotting and visualization
+- **numpy 2.0.2**: Numerical computing
 - **beautifulsoup4 4.14.2**: HTML parsing for scraping
 - **Jinja2 3.1.6**: Template engine
 - **Werkzeug 3.1.3**: WSGI utility library

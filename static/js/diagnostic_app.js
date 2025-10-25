@@ -22,18 +22,22 @@ const AppData = {
   ],
   fault_predictions: [
     {
-      fault_type: "Short Circuit",
-      location: "Headlight Wiring Harness",
-      probability: 0.78,
+      dtc_code: "P062700",
+      fault_type: "Open Circuit",
+      component: "Fuel Pump Relay Control Circuit",
+      probable_cause: "Open in relay control circuit",
+      impact: "Engine shuts off, Fuel pump inactive",
       severity: "High",
-      estimated_time_to_failure: "2-3 weeks"
+      recommended_action: "Check relay and wiring harness"
     },
     {
-      fault_type: "Open Circuit",
-      location: "Door Lock Actuator Circuit",
-      probability: 0.65,
-      severity: "Medium",
-      estimated_time_to_failure: "1-2 months"
+      dtc_code: "P026100",
+      fault_type: "Short to Ground",
+      component: "Fuel Injector 1 Control Circuit",
+      probable_cause: "Control wire short to ground",
+      impact: "Cylinder 1 disabled, Engine limited to 1500 RPM",
+      severity: "High",
+      recommended_action: "Inspect injector wiring and connector"
     }
   ]
 };
@@ -69,13 +73,6 @@ class DiagnosticApp {
     
     const startBtn = document.getElementById('start-diagnostic-btn');
     if (startBtn) startBtn.addEventListener('click', () => this.startDiagnostic());
-
-    // Dashboard events
-    const refreshBtn = document.getElementById('refresh-data-btn');
-    if (refreshBtn) refreshBtn.addEventListener('click', () => this.refreshData());
-    
-    const exportBtn = document.getElementById('export-report-btn');
-    if (exportBtn) exportBtn.addEventListener('click', () => this.exportReport());
   }
 
   simulateOCRScan() {
@@ -173,11 +170,12 @@ class DiagnosticApp {
       const predCard = document.createElement('div');
       predCard.className = 'prediction-card';
       predCard.innerHTML = `
-        <h4>${prediction.fault_type}</h4>
-        <p><strong>Location:</strong> ${prediction.location}</p>
-        <p><strong>Probability:</strong> ${Math.round(prediction.probability * 100)}%</p>
-        <p><strong>Severity:</strong> <span class="severity-${prediction.severity.toLowerCase()}">${prediction.severity}</span></p>
-        <p><strong>Time to Failure:</strong> ${prediction.estimated_time_to_failure}</p>
+        <h4>DTC ${prediction.dtc_code} - ${prediction.fault_type}</h4>
+        <p><strong>Component:</strong> ${prediction.component}</p>
+        <p><strong>Probable Cause:</strong> ${prediction.probable_cause}</p>
+        <p><strong>Impact:</strong> ${prediction.impact}</p>
+        <p><strong>Severity:</strong> <span style="color: #e53935;">${prediction.severity}</span></p>
+        <p><strong>Recommended Action:</strong> ${prediction.recommended_action}</p>
       `;
       predictionsList.appendChild(predCard);
     });
@@ -201,24 +199,6 @@ class DiagnosticApp {
     AppData.vehicle_data.engine_rpm = 867 + Math.floor(Math.random() * 100 - 50);
     AppData.vehicle_data.battery_voltage = Math.round((13.7 + (Math.random() * 0.4 - 0.2)) * 10) / 10;
     AppData.vehicle_data.electrical_health_score = Math.max(70, Math.min(80, 73 + Math.floor(Math.random() * 10 - 5)));
-  }
-
-  refreshData() {
-    const btn = document.getElementById('refresh-data-btn');
-    if (!btn) return;
-    
-    btn.textContent = 'Refreshing...';
-    btn.disabled = true;
-
-    setTimeout(() => {
-      this.updateDashboard();
-      btn.textContent = 'Refresh Data';
-      btn.disabled = false;
-    }, 1500);
-  }
-
-  exportReport() {
-    alert('Diagnostic report exported successfully!');
   }
 }
 
