@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/diagnostic_app.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>{% block title %}DTC Diagnostics{% endblock %}</title>
 </head>
 <body>
@@ -17,10 +18,8 @@
                 <li><a href="/vehicle" class="{% if request.endpoint == 'vehicle_selection' %}active{% endif %}">Vehicle</a></li>
                 {% if session.get('vehicle_selected') %}
                 <li><a href="/" class="{% if request.endpoint == 'index' %}active{% endif %}">Dashboard</a></li>
-                <li><a href="#diagnostics">Diagnostics</a></li>
-                <li><a href="#ai-analysis">AI Analysis</a></li>
+                <li><a href="/analysis" class="{% if request.endpoint == 'analysis' %}active{% endif %}">Analysis</a></li>
                 <li><a href="/dtc-lookup" class="{% if request.endpoint == 'dtc_lookup' %}active{% endif %}">Procedures</a></li>
-                <li><a href="#freeze-frame">Freeze Frame</a></li>
                 {% endif %}
             </ul>
             <div class="dtc-codes-section" id="dtc-codes-section" style="display: {% if request.endpoint == 'dtc_detail' %}block{% else %}none{% endif %};">
