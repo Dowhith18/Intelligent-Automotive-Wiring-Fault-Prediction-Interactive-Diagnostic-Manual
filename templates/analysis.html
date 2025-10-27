@@ -39,41 +39,6 @@
                 </div>
             </div>
 
-            <!-- Demo Data Section -->
-            <div class="demo-section">
-                <h4>or try a demo dataset...</h4>
-                <div class="demo-grid">
-                    <div class="demo-card">
-                        <div class="demo-content">
-                            <h5>Highway Diagnostic Scan</h5>
-                            <p>Highway driving with full diagnostics.</p>
-                        </div>
-                        <button class="btn btn--secondary btn--sm demo-btn" data-demo="highway">
-                            <i class="fas fa-play"></i> Load
-                        </button>
-                    </div>
-                    
-                    <div class="demo-card">
-                        <div class="demo-content">
-                            <h5>City Driving Scan</h5>
-                            <p>Urban neighbourhood driving data.</p>
-                        </div>
-                        <button class="btn btn--secondary btn--sm demo-btn" data-demo="city">
-                            <i class="fas fa-play"></i> Load
-                        </button>
-                    </div>
-                    
-                    <div class="demo-card">
-                        <div class="demo-content">
-                            <h5>Idling Diagnostic (20 min)</h5>
-                            <p>Idling diagnostics from cold start.</p>
-                        </div>
-                        <button class="btn btn--secondary btn--sm demo-btn" data-demo="idling">
-                            <i class="fas fa-play"></i> Load
-                        </button>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -88,7 +53,7 @@
                 <p>Total DTCs</p>
             </div>
         </div>
-        
+
         <div class="stat-card">
             <div class="stat-icon">
                 <i class="fas fa-exclamation-triangle"></i>
@@ -98,7 +63,7 @@
                 <p>High Severity</p>
             </div>
         </div>
-        
+
         <div class="stat-card">
             <div class="stat-icon">
                 <i class="fas fa-warning"></i>
@@ -108,7 +73,7 @@
                 <p>Medium Severity</p>
             </div>
         </div>
-        
+
         <div class="stat-card">
             <div class="stat-icon">
                 <i class="fas fa-info-circle"></i>
@@ -153,11 +118,12 @@
                         <tr>
                             <td><strong>{{ system }}</strong></td>
                             <td>{{ count }}</td>
-                            <td>{{ "%.1f"|format((count / stats.total_dtcs * 100)) }}%</td>
+                            {% set pct = (count / stats.total_dtcs * 100) if stats.total_dtcs else 0 %}
+                            <td>{{ "%.1f"|format(pct) }}%</td>
                             <td>
-                                {% if (count / stats.total_dtcs * 100) > 20 %}
+                                {% if pct > 20 %}
                                 <span class="badge badge-high">Critical</span>
-                                {% elif (count / stats.total_dtcs * 100) > 10 %}
+                                {% elif pct > 10 %}
                                 <span class="badge badge-medium">Moderate</span>
                                 {% else %}
                                 <span class="badge badge-low">Normal</span>
@@ -177,31 +143,31 @@
             <div class="severity-breakdown">
                 <div class="severity-item severity-high">
                     <div class="severity-bar">
-                        <div class="severity-fill" style="width: {{ (stats.severity_counts.High / stats.total_dtcs * 100)|round(1) }}%"></div>
+                        <div class="severity-fill" data-fill="{{ (stats.severity_counts.High / stats.total_dtcs * 100)|round(1) if stats.total_dtcs else 0 }}"></div>
                     </div>
                     <div class="severity-info">
                         <span class="severity-label">High Severity</span>
-                        <span class="severity-value">{{ stats.severity_counts.High }} ({{ "%.1f"|format(stats.severity_counts.High / stats.total_dtcs * 100) }}%)</span>
+                        <span class="severity-value">{{ stats.severity_counts.High }} ({{ "%.1f"|format((stats.severity_counts.High / stats.total_dtcs * 100) if stats.total_dtcs else 0) }}%)</span>
                     </div>
                 </div>
                 
                 <div class="severity-item severity-medium">
                     <div class="severity-bar">
-                        <div class="severity-fill" style="width: {{ (stats.severity_counts.Medium / stats.total_dtcs * 100)|round(1) }}%"></div>
+                        <div class="severity-fill" data-fill="{{ (stats.severity_counts.Medium / stats.total_dtcs * 100)|round(1) if stats.total_dtcs else 0 }}"></div>
                     </div>
                     <div class="severity-info">
                         <span class="severity-label">Medium Severity</span>
-                        <span class="severity-value">{{ stats.severity_counts.Medium }} ({{ "%.1f"|format(stats.severity_counts.Medium / stats.total_dtcs * 100) }}%)</span>
+                        <span class="severity-value">{{ stats.severity_counts.Medium }} ({{ "%.1f"|format((stats.severity_counts.Medium / stats.total_dtcs * 100) if stats.total_dtcs else 0) }}%)</span>
                     </div>
                 </div>
                 
                 <div class="severity-item severity-low">
                     <div class="severity-bar">
-                        <div class="severity-fill" style="width: {{ (stats.severity_counts.Low / stats.total_dtcs * 100)|round(1) }}%"></div>
+                        <div class="severity-fill" data-fill="{{ (stats.severity_counts.Low / stats.total_dtcs * 100)|round(1) if stats.total_dtcs else 0 }}"></div>
                     </div>
                     <div class="severity-info">
                         <span class="severity-label">Low Severity</span>
-                        <span class="severity-value">{{ stats.severity_counts.Low }} ({{ "%.1f"|format(stats.severity_counts.Low / stats.total_dtcs * 100) }}%)</span>
+                        <span class="severity-value">{{ stats.severity_counts.Low }} ({{ "%.1f"|format((stats.severity_counts.Low / stats.total_dtcs * 100) if stats.total_dtcs else 0) }}%)</span>
                     </div>
                 </div>
             </div>
@@ -283,120 +249,136 @@
     </div>
 
     <!-- Chart.js Library -->
+    <script id="analysis-meta" type="application/json">
+        {{ {'total_dtcs': stats.total_dtcs, 'system_counts': stats.system_counts, 'severity_counts': stats.severity_counts}|tojson|safe }}
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
+        const analysisMetaElem = document.getElementById('analysis-meta');
+        let analysisMeta = null;
+        if (analysisMetaElem) {
+            try {
+                analysisMeta = JSON.parse(analysisMetaElem.textContent || '{}');
+            } catch (error) {
+                console.warn('Failed to parse analysis metadata', error);
+            }
+        }
+
+        const systemCountsData = analysisMeta && analysisMeta.system_counts ? analysisMeta.system_counts : {};
+        const severityCountsData = analysisMeta && analysisMeta.severity_counts ? analysisMeta.severity_counts : {};
+        const totalDtcs = analysisMeta && typeof analysisMeta.total_dtcs === 'number' ? analysisMeta.total_dtcs : 0;
+
+        // Build data for charts
+        const systemLabels = Object.keys(systemCountsData).filter(label => systemCountsData[label] > 0);
+        const systemValues = systemLabels.map(label => systemCountsData[label]);
+        const systemPalette = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#6b7280'];
+
+        const severityOrder = ['High', 'Medium', 'Low'];
+        const severityPalette = { High: '#ef4444', Medium: '#f59e0b', Low: '#10b981' };
+        const severityLabels = severityOrder.filter(label => Object.prototype.hasOwnProperty.call(severityCountsData, label));
+        const severityValues = severityLabels.map(label => severityCountsData[label]);
+        const severityColors = severityLabels.map(label => severityPalette[label] || '#94a3b8');
+
+        document.querySelectorAll('.severity-fill[data-fill]').forEach(bar => {
+            const value = parseFloat(bar.dataset.fill || '0');
+            if (!Number.isNaN(value)) {
+                const clamped = Math.max(0, Math.min(value, 100));
+                bar.style.width = `${clamped}%`;
+            }
+        });
+
         // System Distribution Chart
-        const systemCtx = document.getElementById('systemChart').getContext('2d');
-        const systemChart = new Chart(systemCtx, {
-            type: 'doughnut',
-            data: {
-                labels: [
-                    {% for system, count in stats.system_counts.items() %}
-                    {% if count > 0 %}
-                    '{{ system }}',
-                    {% endif %}
-                    {% endfor %}
-                ],
-                datasets: [{
-                    data: [
-                        {% for system, count in stats.system_counts.items() %}
-                        {% if count > 0 %}
-                        {{ count }},
-                        {% endif %}
-                        {% endfor %}
-                    ],
-                    backgroundColor: [
-                        '#3b82f6',
-                        '#10b981',
-                        '#f59e0b',
-                        '#ef4444',
-                        '#8b5cf6',
-                        '#ec4899',
-                        '#06b6d4',
-                        '#6b7280'
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 15,
-                            font: {
-                                size: 12
+        const systemCanvas = document.getElementById('systemChart');
+        if (systemCanvas) {
+            const systemCtx = systemCanvas.getContext('2d');
+            new Chart(systemCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: systemLabels,
+                    datasets: [{
+                        data: systemValues,
+                        backgroundColor: systemLabels.map((_, index) => systemPalette[index % systemPalette.length])
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                font: {
+                                    size: 12
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
 
         // Severity Distribution Chart
-        const severityCtx = document.getElementById('severityChart').getContext('2d');
-        const severityChart = new Chart(severityCtx, {
-            type: 'bar',
-            data: {
-                labels: ['High', 'Medium', 'Low'],
-                datasets: [{
-                    label: 'Number of DTCs',
-                    data: [
-                        {{ stats.severity_counts.High }},
-                        {{ stats.severity_counts.Medium }},
-                        {{ stats.severity_counts.Low }}
-                    ],
-                    backgroundColor: [
-                        '#ef4444',
-                        '#f59e0b',
-                        '#10b981'
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
+        const severityCanvas = document.getElementById('severityChart');
+        if (severityCanvas) {
+            const severityCtx = severityCanvas.getContext('2d');
+            new Chart(severityCtx, {
+                type: 'bar',
+                data: {
+                    labels: severityLabels,
+                    datasets: [{
+                        label: 'Number of DTCs',
+                        data: severityValues,
+                        backgroundColor: severityColors
+                    }]
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 100
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
                         }
                     }
                 }
-            }
-        });
+            });
+        }
 
         // Refresh Analysis
-        document.getElementById('refresh-analysis-btn').addEventListener('click', function() {
-            location.reload();
-        });
+        const refreshBtn = document.getElementById('refresh-analysis-btn');
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', function() {
+                location.reload();
+            });
+        }
 
         // Export Analysis
-        document.getElementById('export-analysis-btn').addEventListener('click', function() {
-            const reportData = {
-                timestamp: new Date().toISOString(),
-                total_dtcs: {{ stats.total_dtcs }},
-                severity: {{ stats.severity_counts|tojson }},
-                systems: {{ stats.system_counts|tojson }}
-            };
-            
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reportData, null, 2));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "dtc_analysis_report.json");
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
-            
-            alert('Analysis report exported successfully!');
-        });
+        const exportBtn = document.getElementById('export-analysis-btn');
+        if (exportBtn) {
+            exportBtn.addEventListener('click', function() {
+                const reportData = {
+                    timestamp: new Date().toISOString(),
+                    total_dtcs: totalDtcs,
+                    severity: severityCountsData,
+                    systems: systemCountsData
+                };
+                
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reportData, null, 2));
+                const downloadAnchorNode = document.createElement('a');
+                downloadAnchorNode.setAttribute("href", dataStr);
+                downloadAnchorNode.setAttribute("download", "dtc_analysis_report.json");
+                document.body.appendChild(downloadAnchorNode);
+                downloadAnchorNode.click();
+                downloadAnchorNode.remove();
+                
+                alert('Analysis report exported successfully!');
+            });
+        }
 
         // File Upload Functionality
         const uploadArea = document.getElementById('upload-area');
@@ -406,136 +388,118 @@
         const uploadForm = document.getElementById('csv-upload-form');
 
         // File input change
-        fileInput.addEventListener('change', function(e) {
-            if (this.files.length > 0) {
-                if (this.files.length === 1) {
-                    fileName.textContent = this.files[0].name;
+        if (fileInput && fileName) {
+            fileInput.addEventListener('change', function(e) {
+                if (this.files.length > 0) {
+                    if (this.files.length === 1) {
+                        fileName.textContent = this.files[0].name;
+                    } else {
+                        fileName.textContent = `${this.files.length} files selected`;
+                    }
                 } else {
-                    fileName.textContent = `${this.files.length} files selected`;
+                    fileName.textContent = 'No file selected.';
                 }
-            } else {
-                fileName.textContent = 'No file selected.';
-            }
-        });
+            });
+        }
 
         // Drag and Drop
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, preventDefaults, false);
-        });
+        if (uploadArea) {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, preventDefaults, false);
+            });
+        }
 
         function preventDefaults(e) {
             e.preventDefault();
             e.stopPropagation();
         }
 
-        ['dragenter', 'dragover'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, function() {
-                uploadArea.classList.add('drag-over');
-                dragOverlay.classList.add('active');
-            }, false);
-        });
+        if (uploadArea && dragOverlay) {
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, function() {
+                    uploadArea.classList.add('drag-over');
+                    dragOverlay.classList.add('active');
+                }, false);
+            });
 
-        ['dragleave', 'drop'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, function() {
-                uploadArea.classList.remove('drag-over');
-                dragOverlay.classList.remove('active');
-            }, false);
-        });
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, function() {
+                    uploadArea.classList.remove('drag-over');
+                    dragOverlay.classList.remove('active');
+                }, false);
+            });
+        }
 
-        uploadArea.addEventListener('drop', function(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            fileInput.files = files;
-            
-            if (files.length > 0) {
-                if (files.length === 1) {
-                    fileName.textContent = files[0].name;
-                } else {
-                    fileName.textContent = `${files.length} files selected`;
+        if (uploadArea && fileInput && fileName) {
+            uploadArea.addEventListener('drop', function(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                fileInput.files = files;
+                
+                if (files.length > 0) {
+                    if (files.length === 1) {
+                        fileName.textContent = files[0].name;
+                    } else {
+                        fileName.textContent = `${files.length} files selected`;
+                    }
                 }
-            }
-        });
+            });
+        }
 
         // Form submission
-        uploadForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            if (fileInput.files.length === 0) {
-                alert('Please select a CSV file to upload.');
-                return;
-            }
-
-            const formData = new FormData();
-            for (let i = 0; i < fileInput.files.length; i++) {
-                formData.append('csv_files', fileInput.files[i]);
-            }
-
-            // Show loading state
-            const uploadBtn = document.getElementById('upload-btn');
-            const originalText = uploadBtn.innerHTML;
-            uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
-            uploadBtn.disabled = true;
-
-            // Upload to server
-            fetch('/upload-diagnostic-data', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(`Successfully uploaded ${data.files.length} file(s)!\n\nFiles: ${data.files.join(', ')}\n\nThe diagnostic data has been imported and is ready for analysis.`);
-                    
-                    // If trip data analysis is available, redirect to trip dashboard
-                    if (data.trip_data && data.files.length > 0) {
-                        const proceed = confirm('Would you like to view the OBD-II Trip Analysis Dashboard?');
-                        if (proceed) {
-                            window.location.href = `/trip-dashboard/${data.files[0]}`;
-                        }
-                    }
-                    
-                    fileInput.value = '';
-                    fileName.textContent = 'No file selected.';
-                } else {
-                    alert('Upload failed: ' + (data.error || 'Unknown error'));
+        if (uploadForm) {
+            uploadForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (fileInput.files.length === 0) {
+                    alert('Please select a CSV file to upload.');
+                    return;
                 }
-            })
-            .catch(error => {
-                alert('Upload failed: ' + error.message);
-            })
-            .finally(() => {
-                uploadBtn.innerHTML = originalText;
-                uploadBtn.disabled = false;
-            });
-        });
 
-        // Demo data buttons - call server first to attempt analysis, then navigate if successful
-        document.querySelectorAll('.demo-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const demoType = this.getAttribute('data-demo');
-                const originalText = this.innerHTML;
-                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-                this.disabled = true;
+                const formData = new FormData();
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    formData.append('csv_files', fileInput.files[i]);
+                }
 
-                fetch(`/load-demo-data/${demoType}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.success) {
-                            // Analysis succeeded on server; navigate to dashboard view
-                            window.location.href = `/trip-dashboard/${demoType}`;
-                        } else {
-                            const err = data && data.error ? data.error : 'Unknown error while loading demo data';
-                            alert('Demo load failed: ' + err);
+                // Show loading state
+                const uploadBtn = document.getElementById('upload-btn');
+                const originalText = uploadBtn.innerHTML;
+                uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+                uploadBtn.disabled = true;
+
+                // Upload to server
+                fetch('/upload-diagnostic-data', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`Successfully uploaded ${data.files.length} file(s)!\n\nFiles: ${data.files.join(', ')}\n\nThe diagnostic data has been imported and is ready for analysis.`);
+                        
+                        // If trip data analysis is available, redirect to trip dashboard
+                        if (data.trip_data && data.files.length > 0) {
+                            const proceed = confirm('Would you like to view the OBD-II Trip Analysis Dashboard?');
+                            if (proceed) {
+                                window.location.href = `/trip-dashboard/${data.files[0]}`;
+                            }
                         }
-                    })
-                    .catch(err => {
-                        alert('Demo load failed: ' + err.message);
-                    })
-                    .finally(() => {
-                        btn.innerHTML = originalText;
-                        btn.disabled = false;
-                    });
+                        
+                        fileInput.value = '';
+                        fileName.textContent = 'No file selected.';
+                    } else {
+                        alert('Upload failed: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    alert('Upload failed: ' + error.message);
+                })
+                .finally(() => {
+                    uploadBtn.innerHTML = originalText;
+                    uploadBtn.disabled = false;
+                });
             });
-        });
+        }
+
     </script>
 {% endblock %}

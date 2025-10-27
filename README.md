@@ -30,6 +30,20 @@ A comprehensive Flask-based web application for automotive diagnostics, featurin
 
 **Windows (recommended)**: Installing binary scientific packages (numpy, pandas, matplotlib) with pip on Windows can fail when compiled wheels are not available for your Python version. For a smooth setup on Windows prefer using Miniconda/Anaconda and the provided conda environment file below.
 
+### Windows (Conda) — recommended
+
+If you are on Windows, creating a Conda environment with prebuilt binary packages avoids pip build failures for packages like numpy and pandas. A ready-to-use Conda environment file is included as `environment-windows.yml` in the project root. Example steps:
+
+```powershell
+conda env create -f environment-windows.yml
+conda activate iawfpidm
+# (optional) install any remaining Python packages from requirements
+pip install -r requirements.txt
+python app.py
+```
+
+This sets up numpy, pandas, matplotlib and other binary dependencies using Anaconda/Conda packages that work on Windows.
+
 ## 🛠️ Installation
 
 ### 1. Clone the repository

@@ -10,16 +10,14 @@ app = Flask(__name__)
 app.secret_key = 'your-secret-key-change-this-in-production'  # Change this to a random secret key
 
 # Upload configuration
-UPLOAD_FOLDER = 'uploads'
-# Primary demo folder (optional). If demo files aren't present there, we will fall back to UPLOAD_FOLDER.
-DEMO_FOLDER = os.path.join('instance', 'demo')
+ROOT_DIR = app.root_path
+UPLOAD_FOLDER = os.path.join(ROOT_DIR, 'uploads')
 ALLOWED_EXTENSIONS = {'csv'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
-# Create upload and demo folders if they don't exist
+# Create upload folder if it doesn't exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-os.makedirs(DEMO_FOLDER, exist_ok=True)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -280,67 +278,17 @@ def upload_diagnostic_data():
     
     return jsonify(response)
 
-@app.route('/load-demo-data/<demo_type>')
-def load_demo_data(demo_type):
-    """Loads demo diagnostic data for analysis."""
-    # Allow demo loading without authentication so users can try the app quickly
-    
-    demo_files = {
-        # Prefer bundled demo files. If a specific demo isn't present, it will fall back to uploads/.
-        # The repo includes 'grocery-run.csv' and 'idling-20.csv' under uploads/.
-        'highway': 'grocery-run.csv',
-        'city': 'grocery-run.csv',
-        'idling': 'idling-20.csv'
-    }
-    
-    demo_file = demo_files.get(demo_type)
-    if not demo_file:
-        return jsonify({'error': 'Invalid demo type'}), 400
-    
-    # Prefer instance/demo, but fall back to uploads/ for demo assets that ship in the repo
-    demo_path = os.path.join(DEMO_FOLDER, demo_file)
-    if not os.path.exists(demo_path):
-        demo_path = os.path.join(UPLOAD_FOLDER, demo_file)
-    
-    if not os.path.exists(demo_path):
-        return jsonify({'error': f'Demo file not found: {demo_file}'}), 404
-    
-    try:
-        from analysis import generate_dashboard
-        trip_data = generate_dashboard(demo_path)
-        return jsonify({
-            'success': True, 
-            'data': {
-                'name': demo_type.capitalize() + ' Demo',
-                'trip_info': trip_data.get('trip_info') if isinstance(trip_data, dict) else None,
-                'has_charts': True
-            }
-        })
-    except Exception as e:
-        # If analysis module isn't available or fails, return a clear error so frontend can handle it
-        print(f"Failed to analyze demo data {demo_path}: {e}")
-        return jsonify({'error': f'Failed to analyze demo data: {str(e)}'}), 500
-
-@app.route('/trip-dashboard/<trip_id>')
+@app.route('/trip-dashboard/<path:trip_id>')
 def trip_dashboard(trip_id):
     """Renders the OBD-II trip analysis dashboard."""
-    # Allow demo trip dashboards to be viewed without login
-    demo_files = {
-        'highway': 'phoenix-to-tempe.csv',
-        'city': 'grocery-run.csv',
-        'idling': 'idling-20.csv'
-    }
-    if trip_id not in demo_files and 'user' not in session:
+    if 'user' not in session:
         return redirect(url_for('login'))
-    # Check for demo files first (demo_files defined above)
-    
-    if trip_id in demo_files:
-        # Prefer instance/demo, but fall back to uploads/ if missing
-        csv_path = os.path.join(DEMO_FOLDER, demo_files[trip_id])
-        if not os.path.exists(csv_path):
-            csv_path = os.path.join(UPLOAD_FOLDER, demo_files[trip_id])
-    else:
-        csv_path = os.path.join(app.config['UPLOAD_FOLDER'], trip_id)
+
+    uploads_root = os.path.abspath(app.config['UPLOAD_FOLDER'])
+    csv_path = os.path.abspath(os.path.join(uploads_root, trip_id))
+
+    if not csv_path.startswith(uploads_root + os.sep):
+        return "Invalid trip identifier", 400
     
     if not os.path.exists(csv_path):
         return "Trip data not found", 404

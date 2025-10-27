@@ -1,453 +1,444 @@
 {% extends "base.html" %}
 
 {% block title %}
-    OBD-II Trip Analysis - IAWFPIDM
+    Trip Dashboard - IAWFPIDM
 {% endblock %}
 
 {% block content %}
-    <div class="page-header">
+<section class="trip-dashboard">
+    <div class="dashboard-top">
         <div>
-            <h2>OBD-II Trip Analysis Dashboard</h2>
-            <p>Real-time vehicle sensor data and driving behavior analysis</p>
+            <h2>Trip Performance Overview</h2>
+            <p class="dashboard-subtitle">Summarized telematics insights from your selected trip</p>
         </div>
-        <div class="dashboard-controls">
-            <button class="btn btn--secondary btn--sm" onclick="window.history.back()">
-                <i class="fas fa-arrow-left"></i> Back to Analysis
-            </button>
+        <button class="btn btn--secondary btn--sm" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i> Back to Analysis
+        </button>
+    </div>
+
+    <div class="metric-grid">
+        <div class="metric-card">
+            <span class="metric-value">{{ (trip_data.trip_info.distance_km or 0)|round(2) }}</span>
+            <span class="metric-unit">km</span>
+            <span class="metric-label">Distance Travelled</span>
+        </div>
+        <div class="metric-card">
+            <span class="metric-value">{{ trip_data.trip_info.duration_minutes or 0 }}</span>
+            <span class="metric-unit">minutes</span>
+            <span class="metric-label">Total Trip Time</span>
+        </div>
+        <div class="metric-card">
+            <span class="metric-value">{{ (trip_data.trip_info.avg_kmpl or 0)|round(2) }}</span>
+            <span class="metric-unit">km/l</span>
+            <span class="metric-label">Average Fuel Economy</span>
+        </div>
+        <div class="metric-card">
+            <span class="metric-value">{{ (trip_data.trip_info.avg_speed_kmh or 0)|round(2) }}</span>
+            <span class="metric-unit">km/h</span>
+            <span class="metric-label">Average Speed</span>
+        </div>
+        <div class="metric-card metric-card--cost">
+            <div class="metric-value-group">
+                <span class="metric-value" id="tripCost">₹0.00</span>
+                <div class="price-input">
+                    <span class="currency">₹</span>
+                    <input id="fuelPrice" type="number" value="108.00" step="0.50" min="0" max="300">
+                    <span class="unit">/litre</span>
+                </div>
+            </div>
+            <span class="metric-label">Estimated Trip Fuel Cost</span>
+            <span id="fuelConsumed" data-liters="{{ (trip_data.trip_info.fuel_consumed_liters or 0)|round(2) }}" hidden></span>
         </div>
     </div>
 
-    <!-- Trip Information Cards -->
-    <div class="stats-overview trip-stats">
-        <div class="stat-card">
-            <div class="stat-icon">
-                <i class="fas fa-road"></i>
+    <div class="charts-grid">
+        <article class="chart-card">
+            <div class="chart-header">
+                <h3><i class="fas fa-tachometer-alt"></i> Engine RPM</h3>
+                <span class="chart-subtitle">How efficiently you used your rev range</span>
             </div>
-            <div class="stat-content">
-                <h3>{{ trip_data.trip_info.distance }}</h3>
-                <p>Kilometers Travelled</p>
+            <img src="{{ trip_data.rpm_img }}" alt="Engine RPM over time" class="chart-img chart-clickable" onclick="openFullscreen(this, 'Engine RPM - Trip Overview')">
+            <div class="chart-content">
+                <p>
+                    Engine RPM (revolutions per minute) reveals how hard the engine is working. Staying between
+                    1,000-3,000 RPM keeps the engine in its efficient operating range. Extended time above 5,000 RPM
+                    increases heat, fuel consumption, and wear.
+                </p>
+                <ul>
+                    <li><strong>&gt; 5,000 RPM:</strong> High rpm means higher fuel usage.</li>
+                    <li><strong>1,000 - 3,000 RPM:</strong> Ideal range for most cruising scenarios.</li>
+                    <li><strong>&lt; 1,000 RPM:</strong> Extended idling wastes fuel without covering distance.</li>
+                </ul>
+                <a class="read-more" href="#" onclick="event.preventDefault(); openFullscreen(this.previousElementSibling.previousElementSibling, 'Engine RPM - Trip Overview');">Read More</a>
             </div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon">
-                <i class="fas fa-clock"></i>
+        </article>
+
+        <article class="chart-card">
+            <div class="chart-header">
+                <h3><i class="fas fa-gauge-high"></i> Vehicle Speed</h3>
+                <span class="chart-subtitle">Speed profile throughout the trip</span>
             </div>
-            <div class="stat-content">
-                <h3>{{ trip_data.trip_info.duration }}</h3>
-                <p>Minutes</p>
+            <img src="{{ trip_data.ideal_speed_img }}" alt="Vehicle speed over time" class="chart-img chart-clickable" onclick="openFullscreen(this, 'Vehicle Speed - Trip Overview')">
+            <div class="chart-content">
+                <p>
+                    Higher speeds push more air out of the way and need more engine power. The highlighted green zone marks
+                    efficient cruising speeds (roughly 50–100 km/h). Staying in this band keeps fuel usage balanced and reduces driver fatigue.
+                </p>
+                <ul>
+                    <li><strong>&gt; 100 km/h:</strong> Aerodynamic drag grows quickly and efficiency drops.</li>
+                    <li><strong>50 - 100 km/h:</strong> Ideal expressway speeds for most vehicles.</li>
+                    <li><strong>&lt; 50 km/h:</strong> Frequent stops or slow traffic reduce efficiency.</li>
+                </ul>
+                <a class="read-more" href="#" onclick="event.preventDefault(); openFullscreen(this.previousElementSibling.previousElementSibling, 'Vehicle Speed - Trip Overview');">Read More</a>
             </div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon">
-                <i class="fas fa-gas-pump"></i>
+        </article>
+
+        <article class="chart-card">
+            <div class="chart-header">
+                <h3><i class="fas fa-up-down"></i> Driving Dynamics</h3>
+                <span class="chart-subtitle">Acceleration and braking behavior</span>
             </div>
-            <div class="stat-content">
-                <h3>{{ trip_data.trip_info.avg_kmpl }}</h3>
-                <p>Average km/l</p>
+            <img src="{{ trip_data.acc_img }}" alt="Vehicle acceleration over time" class="chart-img chart-clickable" onclick="openFullscreen(this, 'Driving Dynamics - Acceleration')">
+            <div class="chart-content">
+                <p>
+                    Rapid changes in acceleration and harsh braking events can reduce fuel efficiency and increase wear.
+                    Smooth inputs keep the drivetrain in balance and offer passengers a comfortable ride.
+                </p>
+                <ul>
+                    <li><strong>Rapid acceleration:</strong> Burns more fuel to reach target speed.</li>
+                    <li><strong>Coasting:</strong> Taking your foot off the accelerator saves fuel.</li>
+                    <li><strong>Hard braking:</strong> Converts momentum to heat, wasting energy.</li>
+                </ul>
+                <a class="read-more" href="#" onclick="event.preventDefault(); openFullscreen(this.previousElementSibling.previousElementSibling, 'Driving Dynamics - Acceleration');">Read More</a>
             </div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon">
-                <i class="fas fa-tachometer-alt"></i>
+        </article>
+
+        <article class="chart-card">
+            <div class="chart-header">
+                <h3><i class="fas fa-chart-area"></i> Throttle Efficiency</h3>
+                <span class="chart-subtitle">Throttle position vs engine RPM</span>
             </div>
-            <div class="stat-content">
-                <h3>{{ trip_data.trip_info.avg_speed }}</h3>
-                <p>Average Speed (km/h)</p>
+            <img src="{{ trip_data.rpm_throttle }}" alt="Engine RPM vs throttle" class="chart-img chart-clickable" onclick="openFullscreen(this, 'Driving Dynamics - Throttle Efficiency')">
+            <div class="chart-content">
+                <p>
+                    The hexbin plot highlights how much throttle was required to maintain certain RPM bands.
+                    Balanced throttle in the mid-RPM range demonstrates efficient coasting and acceleration habits.
+                </p>
+                <ul>
+                    <li><strong>Bright clusters:</strong> Frequent operating points during the drive.</li>
+                    <li><strong>High RPM + High throttle:</strong> Indicates aggressive acceleration.</li>
+                    <li><strong>Low throttle + Mid RPM:</strong> Shows efficient cruising with minimal load.</li>
+                </ul>
+                <a class="read-more" href="#" onclick="event.preventDefault(); openFullscreen(this.previousElementSibling.previousElementSibling, 'Driving Dynamics - Throttle Efficiency');">Read More</a>
             </div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon">
-                <i class="fas fa-fill-drip"></i>
-            </div>
-            <div class="stat-content">
-                <h3>{{ trip_data.trip_info.fuel_consumed }}</h3>
-                <p>Fuel Consumed (liters)</p>
-            </div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon">
-                <i class="fas fa-rupee-sign"></i>
-            </div>
-            <div class="stat-content">
-                <h3 id="tripCost">₹0.00</h3>
-                <p>Trip Cost</p>
-                <div class="fuel-price-input">
-                    <input type="number" id="fuelPrice" value="105.00" step="0.50" min="0" max="200" 
-                           style="width: 70px; padding: 4px; text-align: center; border: 1px solid #ccc; border-radius: 4px;">
-                    <span style="font-size: 11px; color: #666;">/liter</span>
-                </div>
-                <span id="fuelConsumed" style="display: none;">{{ trip_data.trip_info.fuel_consumed }}</span>
-            </div>
-        </div>
+        </article>
     </div>
+</section>
 
-    <!-- Charts Grid -->
-    <div class="trip-charts-grid">
-        <!-- Engine RPM Chart -->
-        <div class="card chart-card">
-            <h3><i class="fas fa-tachometer-alt"></i> Engine RPM Over Time</h3>
-            <img src="{{ trip_data.rpm_img }}" alt="Engine RPM Chart" class="chart-img chart-clickable" onclick="openFullscreen(this, 'Engine RPM Over Time')">
-            <div class="card-body">
-                <p class="chart-description">
-                    <strong>Analysis:</strong> Engine RPM shows the rotational speed of the engine's crankshaft. 
-                    Maintaining RPM in the optimal zone (1500-3000 RPM) improves fuel efficiency and reduces engine wear.
-                </p>
-                <ul class="chart-tips">
-                    <li><span class="tip-icon" style="background: #22c55e;"></span> <strong>Green Zone (Idle):</strong> 0-1500 RPM - Vehicle at rest or low load</li>
-                    <li><span class="tip-icon" style="background: #eab308;"></span> <strong>Yellow Zone (Optimal):</strong> 1500-3000 RPM - Best fuel efficiency</li>
-                    <li><span class="tip-icon" style="background: #ef4444;"></span> <strong>Red Zone (High):</strong> Above 3000 RPM - Higher fuel consumption and wear</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Vehicle Speed Chart -->
-        <div class="card chart-card">
-            <h3><i class="fas fa-gauge-high"></i> Vehicle Speed Analysis</h3>
-            <img src="{{ trip_data.ideal_speed_img }}" alt="Vehicle Speed Chart" class="chart-img chart-clickable" onclick="openFullscreen(this, 'Vehicle Speed Analysis')">
-            <div class="card-body">
-                <p class="chart-description">
-                    <strong>Analysis:</strong> Speed analysis helps identify driving patterns and efficiency. 
-                    Maintaining consistent speeds in the optimal range (40-88 km/h) maximizes fuel economy.
-                </p>
-                <ul class="chart-tips">
-                    <li><span class="tip-icon" style="background: #eab308;"></span> <strong>Low Speed:</strong> 0-40 km/h - City driving, traffic</li>
-                    <li><span class="tip-icon" style="background: #22c55e;"></span> <strong>Optimal:</strong> 40-88 km/h - Best fuel efficiency range</li>
-                    <li><span class="tip-icon" style="background: #f97316;"></span> <strong>High Speed:</strong> 88-120 km/h - Highway cruising</li>
-                    <li><span class="tip-icon" style="background: #ef4444;"></span> <strong>Very High:</strong> Above 120 km/h - Increased fuel consumption</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Acceleration Chart -->
-        <div class="card chart-card">
-            <h3><i class="fas fa-up-down"></i> Vehicle Acceleration Behavior</h3>
-            <img src="{{ trip_data.acc_img }}" alt="Acceleration Chart" class="chart-img chart-clickable" onclick="openFullscreen(this, 'Vehicle Acceleration Behavior')">
-            <div class="card-body">
-                <p class="chart-description">
-                    <strong>Analysis:</strong> Acceleration patterns reveal driving behavior. 
-                    Smooth acceleration and braking improve fuel efficiency and reduce wear on brake components.
-                </p>
-                <ul class="chart-tips">
-                    <li><span class="tip-icon" style="background: #22c55e;"></span> <strong>Green Points:</strong> Smooth acceleration/deceleration - Efficient driving</li>
-                    <li><span class="tip-icon" style="background: #f97316;"></span> <strong>Orange Points:</strong> Hard acceleration (>0.3g) - Increased fuel consumption</li>
-                    <li><span class="tip-icon" style="background: #ef4444;"></span> <strong>Red Points:</strong> Hard braking (<-0.2g) - Inefficient, increased wear</li>
-                </ul>
-                <div class="tip-box">
-                    <i class="fas fa-lightbulb"></i>
-                    <strong>Tip:</strong> Anticipate traffic flow and maintain steady speeds to minimize harsh acceleration and braking events.
-                </div>
-            </div>
-        </div>
-
-        <!-- RPM vs Throttle Hexbin -->
-        <div class="card chart-card">
-            <h3><i class="fas fa-chart-scatter"></i> Engine RPM vs Throttle Position</h3>
-            <img src="{{ trip_data.rpm_throttle }}" alt="RPM vs Throttle Chart" class="chart-img chart-clickable" onclick="openFullscreen(this, 'Engine RPM vs Throttle Position')">
-            <div class="card-body">
-                <p class="chart-description">
-                    <strong>Analysis:</strong> This hexbin plot shows the relationship between engine RPM and throttle position. 
-                    Darker colors indicate more frequent operating conditions during the trip.
-                </p>
-                <ul class="chart-tips">
-                    <li><i class="fas fa-circle" style="color: #fef08a;"></i> <strong>Light Yellow:</strong> Occasional operating points</li>
-                    <li><i class="fas fa-circle" style="color: #f97316;"></i> <strong>Orange:</strong> Common operating conditions</li>
-                    <li><i class="fas fa-circle" style="color: #dc2626;"></i> <strong>Dark Red:</strong> Most frequent RPM/throttle combinations</li>
-                </ul>
-                <div class="tip-box">
-                    <i class="fas fa-lightbulb"></i>
-                    <strong>Tip:</strong> Efficient driving typically shows clusters in the low-to-medium RPM range with moderate throttle positions.
-                </div>
-            </div>
-        </div>
+<div id="fullscreenModal" class="fullscreen-modal" onclick="closeFullscreen()">
+    <span class="fullscreen-close" onclick="closeFullscreen()">&times;</span>
+    <div class="fullscreen-content" onclick="event.stopPropagation()">
+        <h2 class="fullscreen-header" id="fullscreenTitle"></h2>
+        <img id="fullscreenImg" src="" alt="Chart" />
     </div>
+</div>
 
-    <!-- Recommendations Section -->
-    <div class="card recommendations-card">
-        <h3><i class="fas fa-star"></i> Driving Efficiency Recommendations</h3>
-        <div class="recommendations-list">
-            {% if trip_data.trip_info.avg_kmpl < 8.5 %}
-            <div class="recommendation-item high-priority">
-                <i class="fas fa-exclamation-circle"></i>
-                <div>
-                    <strong>Low Fuel Efficiency Detected:</strong> 
-                    Your average fuel consumption is {{ trip_data.trip_info.avg_kmpl }} km/l, which is below optimal. 
-                    Consider smoother acceleration, maintaining steady speeds, and reducing idling time.
-                </div>
-            </div>
-            {% endif %}
-            
-            {% if trip_data.trip_info.avg_speed < 24 %}
-            <div class="recommendation-item medium-priority">
-                <i class="fas fa-traffic-light"></i>
-                <div>
-                    <strong>Heavy Traffic Conditions:</strong> 
-                    Low average speed ({{ trip_data.trip_info.avg_speed }} km/h) indicates stop-and-go traffic. 
-                    Plan routes during off-peak hours when possible to improve efficiency.
-                </div>
-            </div>
-            {% endif %}
-            
-            <div class="recommendation-item info">
-                <i class="fas fa-leaf"></i>
-                <div>
-                    <strong>Eco-Driving Tips:</strong> 
-                    Maintain speeds between 72-105 km/h on highways, avoid rapid acceleration, 
-                    anticipate stops to reduce braking, and use cruise control on long stretches.
-                </div>
-            </div>
-            
-            <div class="recommendation-item info">
-                <i class="fas fa-wrench"></i>
-                <div>
-                    <strong>Maintenance Reminder:</strong> 
-                    Regular maintenance (oil changes, air filter replacement, tire pressure) 
-                    can improve fuel efficiency by up to 10%.
-                </div>
-            </div>
-        </div>
-    </div>
+<style>
+    .trip-dashboard {
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 28px;
+        color: #0f172a;
+        box-shadow: 0 20px 45px -15px rgba(15, 23, 42, 0.25);
+    }
 
-    <style>
-        .trip-stats {
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        }
-        
-        .trip-charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .chart-img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
+    .dashboard-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
 
-        .chart-clickable {
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
+    .dashboard-subtitle {
+        margin-top: 4px;
+    color: #475569;
+        font-size: 0.95rem;
+    }
 
-        .chart-clickable:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
+    .metric-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 16px;
+    }
 
-        /* Fullscreen Modal */
-        .fullscreen-modal {
-            display: none;
-            position: fixed;
-            z-index: 9999;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.95);
-            animation: fadeIn 0.3s;
-        }
+    .metric-card {
+    background: linear-gradient(135deg, rgba(238, 242, 255, 0.95) 0%, rgba(241, 245, 249, 0.95) 100%);
+        border-radius: 14px;
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        position: relative;
+        overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+    .metric-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+    background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.18), transparent 55%);
+        opacity: 0.8;
+        pointer-events: none;
+    }
 
-        .fullscreen-content {
-            position: relative;
-            width: 95%;
-            height: 95%;
-            margin: 2.5% auto;
-            display: flex;
+    .metric-card--cost::after {
+    background: radial-gradient(circle at top right, rgba(34, 197, 94, 0.2), transparent 55%);
+    }
+
+    .metric-value {
+        font-size: 1.9rem;
+        font-weight: 700;
+    color: #0f172a;
+        z-index: 1;
+    }
+
+    .metric-unit {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    color: #475569;
+        z-index: 1;
+    }
+
+    .metric-label {
+        font-size: 0.85rem;
+    color: #1e293b;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-top: 6px;
+        z-index: 1;
+    }
+
+    .metric-card--cost .metric-label {
+    color: #15803d;
+    }
+
+    .metric-value-group {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+        z-index: 1;
+    }
+
+    .price-input {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    background: rgba(34, 197, 94, 0.12);
+        padding: 6px 10px;
+        border-radius: 999px;
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    }
+
+    .price-input input {
+        width: 70px;
+        background: transparent;
+        border: none;
+    color: #0f172a;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .price-input input:focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+    .price-input span {
+        font-size: 0.85rem;
+    color: #475569;
+    }
+
+    .charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    margin-top: 32px;
+    }
+
+    .chart-card {
+    background: #ffffff;
+        border-radius: 16px;
+        padding: 20px 20px 24px;
+    border: 1px solid rgba(203, 213, 225, 0.8);
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    box-shadow: inset 0 1px 0 rgba(148, 163, 184, 0.08);
+    }
+
+    .chart-header h3 {
+        font-size: 1.2rem;
+        margin: 0;
+    color: #0f172a;
+    }
+
+    .chart-header i {
+        margin-right: 6px;
+    }
+
+    .chart-subtitle {
+        display: block;
+    color: #475569;
+        font-size: 0.9rem;
+        margin-top: 6px;
+    }
+
+    .chart-img {
+        width: 100%;
+        border-radius: 12px;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    background: #f8fafc;
+    }
+
+    .chart-clickable {
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .chart-clickable:hover {
+        transform: scale(1.02);
+    box-shadow: 0 18px 30px -15px rgba(59, 130, 246, 0.25);
+    }
+
+    .chart-content p {
+    color: #1e293b;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .chart-content ul {
+        margin: 12px 0 16px;
+        padding-left: 18px;
+    color: #475569;
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    .read-more {
+    color: #2563eb;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        font-weight: 600;
+    }
+
+    .read-more:hover {
+    color: #1d4ed8;
+    }
+
+    .fullscreen-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+    background: rgba(15, 23, 42, 0.7);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .fullscreen-content {
+        max-width: 90vw;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
+    }
+
+    .fullscreen-content img {
+        max-width: 100%;
+        max-height: 80vh;
+        border-radius: 12px;
+    }
+
+    .fullscreen-header {
+    color: #0f172a;
+        font-size: 1.4rem;
+    }
+
+    .fullscreen-close {
+        position: absolute;
+        top: 24px;
+        right: 30px;
+        font-size: 2rem;
+    color: #475569;
+        cursor: pointer;
+    }
+
+    .fullscreen-close:hover {
+        color: #f87171;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-top {
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .fullscreen-modal img {
-            max-width: 100%;
-            max-height: 90vh;
-            object-fit: contain;
-            border-radius: 8px;
-        }
-
-        .fullscreen-header {
-            color: white;
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .fullscreen-close {
-            position: absolute;
-            top: 20px;
-            right: 35px;
-            color: #fff;
-            font-size: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.3s;
-            z-index: 10000;
-        }
-
-        .fullscreen-close:hover,
-        .fullscreen-close:focus {
-            color: #ff4444;
-        }
-        
-        .chart-description {
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 15px;
-            color: var(--text-secondary);
-        }
-        
-        .chart-tips {
-            list-style: none;
-            padding: 0;
-            margin: 15px 0;
-        }
-        
-        .chart-tips li {
-            padding: 8px 0;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .tip-icon {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border-radius: 3px;
-            flex-shrink: 0;
-        }
-        
-        .tip-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            display: flex;
-            align-items: flex-start;
             gap: 12px;
+            align-items: flex-start;
         }
-        
-        .tip-box i {
-            font-size: 20px;
-            margin-top: 2px;
-            flex-shrink: 0;
+    }
+</style>
+
+<script>
+    const fuelPriceInput = document.getElementById('fuelPrice');
+    const fuelConsumedEl = document.getElementById('fuelConsumed');
+    const tripCost = document.getElementById('tripCost');
+    const inrFormatter = (() => {
+        try {
+            return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 });
+        } catch (error) {
+            return { format: value => `₹${Number(value).toFixed(2)}` };
         }
-        
-        .fuel-price-input {
-            margin-top: 8px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            justify-content: center;
+    })();
+
+    function updateTripCost() {
+        if (!fuelPriceInput || !fuelConsumedEl || !tripCost) {
+            return;
         }
-        
-        @media (max-width: 768px) {
-            .trip-charts-grid {
-                grid-template-columns: 1fr;
-            }
+        const pricePerLitre = parseFloat(fuelPriceInput.value || '0');
+        const litresUsed = parseFloat(fuelConsumedEl.dataset.liters || '0');
+        const totalCost = pricePerLitre * litresUsed;
+        const displayValue = Number.isFinite(totalCost) ? inrFormatter.format(totalCost) : '₹0.00';
+        tripCost.textContent = displayValue;
+    }
+
+    updateTripCost();
+    if (fuelPriceInput) {
+        fuelPriceInput.addEventListener('input', updateTripCost);
+    }
+
+    function openFullscreen(imgElement, title) {
+        const modal = document.getElementById('fullscreenModal');
+        const modalImg = document.getElementById('fullscreenImg');
+        const modalTitle = document.getElementById('fullscreenTitle');
+        modal.style.display = 'flex';
+        modalImg.src = imgElement.src;
+        modalTitle.textContent = title;
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeFullscreen() {
+        const modal = document.getElementById('fullscreenModal');
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closeFullscreen();
         }
-    </style>
-
-    <!-- Fullscreen Modal -->
-    <div id="fullscreenModal" class="fullscreen-modal" onclick="closeFullscreen()">
-        <span class="fullscreen-close" onclick="closeFullscreen()">&times;</span>
-        <div class="fullscreen-content" onclick="event.stopPropagation()">
-            <h2 class="fullscreen-header" id="fullscreenTitle"></h2>
-            <img id="fullscreenImg" src="" alt="Chart">
-        </div>
-    </div>
-
-    <script>
-        // Fullscreen chart functionality
-        function openFullscreen(imgElement, title) {
-            const modal = document.getElementById('fullscreenModal');
-            const modalImg = document.getElementById('fullscreenImg');
-            const modalTitle = document.getElementById('fullscreenTitle');
-            
-            modal.style.display = 'block';
-            modalImg.src = imgElement.src;
-            modalTitle.textContent = title;
-            
-            // Prevent body scroll when modal is open
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeFullscreen() {
-            const modal = document.getElementById('fullscreenModal');
-            modal.style.display = 'none';
-            
-            // Restore body scroll
-            document.body.style.overflow = 'auto';
-        }
-
-        // Close modal with Escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeFullscreen();
-            }
-        });
-
-        // Calculate and update trip cost
-        const fuelPrice = document.getElementById('fuelPrice');
-        const fuelConsumed = document.getElementById('fuelConsumed');
-        const tripCost = document.getElementById('tripCost');
-
-        function updateTripCost() {
-            const cost = (parseFloat(fuelPrice.value) * parseFloat(fuelConsumed.innerText)).toFixed(2);
-            tripCost.innerText = '₹' + cost;
-        }
-
-        // Initial calculation
-        updateTripCost();
-
-        // Update on fuel price change
-        fuelPrice.addEventListener('change', updateTripCost);
-        fuelPrice.addEventListener('input', updateTripCost);
-
-        // Export Trip Report
-        document.getElementById('export-trip-btn').addEventListener('click', function() {
-            const reportData = {
-                timestamp: new Date().toISOString(),
-                trip_info: {
-                    distance_km: {{ trip_data.trip_info.distance }},
-                    duration_minutes: {{ trip_data.trip_info.duration }},
-                    avg_kmpl: {{ trip_data.trip_info.avg_kmpl }},
-                    avg_speed_kmh: {{ trip_data.trip_info.avg_speed }},
-                    fuel_consumed_liters: {{ trip_data.trip_info.fuel_consumed }},
-                    trip_cost_inr: parseFloat(tripCost.innerText.replace('₹', ''))
-                },
-                units: {
-                    distance: 'kilometers',
-                    speed: 'km/h',
-                    fuel_efficiency: 'km/l',
-                    fuel_volume: 'liters',
-                    currency: 'INR'
-                }
-            };
-            
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reportData, null, 2));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "trip_analysis_report.json");
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
-            
-            alert('Trip analysis report exported successfully!');
-        });
-    </script>
+    });
+</script>
 {% endblock %}
