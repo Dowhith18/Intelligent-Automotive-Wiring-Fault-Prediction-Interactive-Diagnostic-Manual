@@ -9,13 +9,19 @@
 
 **Fig. 9.1 Login Screen with validation**
 
+![Login Screen](images/fig_9_1_login_screen.png)
+
      The login interface provides secure authentication with role-based access control. Users enter credentials to access system features based on their assigned role (Administrator, Technician, or Viewer). The screen includes input validation, error messaging for invalid credentials, and password masking for security. The interface features a clean, professional design with the application logo and clear call-to-action buttons.
 
 **Fig. 9.2 Dashboard Overview showing analytics**
 
+![Dashboard Overview](images/fig_9_2_dashboard.png)
+
      The main dashboard presents a comprehensive overview of vehicle diagnostics and system status. Key metrics displayed include odometer reading, battery voltage (13.8V nominal), engine RPM, vehicle speed, engine state indicator, and electrical health percentage. The dashboard provides real-time monitoring capabilities with visual indicators for critical parameters. Navigation menu provides quick access to all system modules including DTC lookup, trip analysis, and fault prediction features.
 
 **Fig. 9.3 Fault Prediction Interface with input form**
+
+![Fault Prediction Interface](images/fig_9_3_fault_prediction.png)
 
      The fault prediction interface displays real-time analysis of engine sensors and wiring faults. The screen shows active fault predictions for critical components including Fuel Pump Relay Control Circuit (P062700) and Fuel Injector 1 Control Circuit (P026100). Each fault entry includes DTC code, component name, fault type classification (Open Circuit, Short to Ground), severity rating (High, Medium, Low), and confidence score. The interface uses color-coded severity indicators for quick visual assessment.
 
@@ -25,33 +31,49 @@
 
 **Fig. 9.5 Interactive Diagnostic Manual Viewer**
 
+![Diagnostic Manual Viewer](images/fig_9_5_diagnostic_manual.png)
+
      The diagnostic manual viewer provides access to detailed troubleshooting guides for each DTC code. Users can browse through comprehensive diagnostic procedures with step-by-step instructions, component locations, and testing procedures. The interface supports search functionality, bookmarking, and navigation through related codes. Content includes technical specifications, wiring diagrams, and component testing procedures.
 
 **Fig. 9.6 Wiring Diagram Viewer with zoom capabilities**
+
+![Wiring Diagram Viewer](images/fig_9_6_wiring_diagram.png)
 
      The wiring diagram viewer displays detailed electrical schematics for automotive systems. Interactive zoom and pan controls allow technicians to examine circuit details at various magnification levels. Diagrams include component identifiers, wire color codes, connector pinouts, and ground locations. The viewer supports layer toggling to isolate specific circuits and highlight fault locations based on diagnostic results.
 
 **Fig. 9.7 Search Results page**
 
+![Search Results](images/fig_9_7_dtc_search.png)
+
      The search functionality enables rapid location of diagnostic codes, symptoms, and components. Results display in a structured table format with filtering options by system category (Engine, Chassis, Body, Network), severity level, and code type. Each result entry shows the DTC code, brief description, affected system, and severity rating. Users can click any result to view detailed diagnostic information.
 
 **Fig. 9.8 Analytics Dashboard with charts**
+
+![Analytics Dashboard](images/fig_9_8_analytics_dashboard.png)
 
      The analytics dashboard presents comprehensive data visualization of vehicle performance metrics and diagnostic trends. Interactive charts display historical fault occurrences, system health trends, and predictive maintenance indicators. The dashboard includes customizable date ranges, export functionality, and drill-down capabilities for detailed analysis. Visualizations use industry-standard chart types including line graphs, bar charts, and pie charts for clear data representation.
 
 **Fig. 9.9 Report Generation Interface**
 
+![Report Generation](images/fig_9_9_report_generation.png)
+
      The report generation interface allows users to create comprehensive diagnostic reports for documentation and record-keeping. Users can select report parameters including date range, vehicle information, detected faults, and performed diagnostics. The interface provides template selection options for different report types (summary, detailed, technical). Preview functionality displays report content before final generation.
 
 **Fig. 9.10 Generated PDF Report Sample**
+
+![PDF Report Sample](images/fig_9_10_pdf_report.png)
 
      Sample PDF report demonstrates professional formatting with complete diagnostic session documentation. Reports include vehicle identification information, session timestamp, detected fault codes with descriptions, diagnostic procedures performed, recommendations, and technician notes. The PDF format ensures compatibility across platforms and maintains formatting integrity for archival purposes. Reports include header with application branding and footer with page numbering.
 
 **Fig. 9.11 User Management Screen (Admin)**
 
+![User Management](images/fig_9_11_user_management.png)
+
      The administrative user management interface enables creation, modification, and deletion of user accounts. Administrators can assign roles, set permissions, reset passwords, and monitor user activity. The screen displays user list with columns for username, role, email, creation date, and last login timestamp. Bulk operations support efficient management of multiple user accounts. Audit logging tracks all administrative actions for security compliance.
 
 **Fig. 9.12 Settings and Configuration Page**
+
+![Settings](images/fig_9_12_settings.png)
 
      The system configuration interface provides access to application settings and preferences. Users can customize display options, notification preferences, data retention policies, and system thresholds. The settings page includes sections for general preferences, diagnostic parameters, reporting options, and integration settings. Changes are validated before application to prevent configuration errors. The interface includes reset to defaults functionality and configuration export/import capabilities.
 
@@ -65,17 +87,25 @@
 
 **Fig. 9.13 Desktop Responsive UI Layout**
 
+![Desktop Layout](images/fig_9_13_desktop_layout.png)
+
      The desktop layout utilizes a three-column structure with persistent navigation sidebar, main content area, and contextual information panel. The sidebar provides hierarchical navigation through system modules with expandable sections for sub-features. The main content area adapts width based on viewport size while maintaining optimal line length for readability. The right panel displays contextual help, recent activity, and quick actions relevant to current screen. Header bar spans full width containing application branding, user profile menu, and global search functionality.
 
 **Fig. 9.14 Tablet View Layout**
+
+![Tablet Layout](images/fig_9_14_tablet_layout.png)
 
      The tablet layout adapts to medium-sized screens by collapsing the navigation sidebar into a slide-out drawer accessible via hamburger menu icon. The main content area expands to utilize available screen width while maintaining touch-friendly control sizing. Charts and data visualizations scale proportionally to maintain readability. Form inputs increase in size to accommodate touch interaction with appropriate spacing to prevent accidental activation. The layout supports both portrait and landscape orientations with automatic reflow of content elements.
 
 **Fig. 9.15 Mobile View Layout**
 
+![Mobile Layout](images/fig_9_15_mobile_layout.png)
+
      The mobile layout implements a single-column vertical stack optimized for small screens and touch interaction. Navigation collapses into a full-screen overlay menu with large touch targets. Content cards stack vertically with full-width presentation. Data tables transform into card-based layouts with expandable rows for detailed information. Charts adapt to vertical orientation with simplified data presentation. Bottom navigation bar provides quick access to primary functions. The interface supports swipe gestures for navigation and pull-to-refresh for data updates.
 
 **Fig. 9.16 Navigation Flow Diagram**
+
+![Navigation Flow](images/fig_9_16_navigation_flow.png)
 
      The navigation flow diagram illustrates user pathways through the application from login to task completion. Primary flows include authentication, vehicle selection, dashboard access, fault prediction workflow, DTC lookup process, trip analysis, and report generation. Decision points indicate conditional navigation based on user role and system state. The diagram shows both linear workflows for guided processes and non-linear navigation for exploratory tasks. Exit points and return paths ensure users can navigate efficiently without becoming trapped in deep hierarchies.
 
@@ -87,17 +117,25 @@
 
 **Fig. 9.17 Response Time Analysis under varying loads**
 
+![Response Time Analysis](images/fig_9_17_response_time.png)
+
      The response time analysis graph displays average, median, and 95th percentile response times across different concurrent user loads. The x-axis represents concurrent users (10, 50, 100, 250, 500) while the y-axis shows response time in milliseconds. Results demonstrate linear scaling up to 250 concurrent users with average response time remaining below 150ms. At 500 concurrent users, average response time increases to 180ms while maintaining acceptable performance. The 95th percentile response time stays below 300ms across all load levels, indicating consistent performance for the majority of requests.
 
 **Fig. 9.18 ML Model Prediction Accuracy Comparison**
+
+![ML Model Accuracy](images/fig_9_18_ml_accuracy.png)
 
      The prediction accuracy comparison chart evaluates fault classification performance across different fault types. The bar chart displays accuracy percentages for Open Circuit (94%), Short Circuit (91%), Ground Fault (89%), and Intermittent Fault (87%) detection. Overall system accuracy achieves 92% across all fault categories. The chart includes confidence intervals showing prediction reliability ranges. Comparison baseline shows 15% improvement over threshold-based detection methods, validating the machine learning approach effectiveness.
 
 **Fig. 9.19 Database Query Performance Metrics**
 
+![Database Performance](images/fig_9_19_db_performance.png)
+
      Database query performance metrics analyze response times for common database operations. The graph shows average query execution times for DTC lookup (35ms), fault history retrieval (52ms), user authentication (28ms), and trip data analysis (78ms). Index optimization reduces lookup times by 40% compared to unindexed queries. Connection pooling maintains consistent performance under concurrent access. Query caching reduces repeated lookup times to under 10ms for frequently accessed data.
 
 **Fig. 9.20 User Engagement Statistics**
+
+![User Engagement](images/fig_9_20_user_engagement.png)
 
      User engagement statistics track feature utilization and interaction patterns. The pie chart shows feature usage distribution with DTC Lookup (35%), Fault Prediction (28%), Trip Analysis (20%), Dashboard Monitoring (12%), and Report Generation (5%). Average session duration measures 12 minutes with 4.5 page views per session. Return user rate reaches 68% indicating strong user retention. Feature adoption rates show 85% of users utilize fault prediction within first three sessions.
 
